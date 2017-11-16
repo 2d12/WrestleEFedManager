@@ -14,6 +14,8 @@ class Wrestleefedmanager_Federation {
 		add_action( 'init',       		array( $this, 'create_federation_post_type' ) ); 
 		//add_action( 'add_meta_boxes', 	array( $this, 'initialize_federation_post_type') );
 		add_action( 'save_post',  		array( $this, 'save_fed') );
+		
+		add_filter ('template_include', array($this, 'display_federation_template' ) );
 	}
 	
 	// Our custom post type function
@@ -36,8 +38,8 @@ class Wrestleefedmanager_Federation {
     );
 	
 	$fedargs = array(
-        'label'               => __( 'feds' ),
-        'description'         => __( 'Federations' ),
+        'label'               => __( 'Federations' ),
+        'description'         => __( 'Wrestling Companies' ),
         'labels'              => $fedlabels,
         // Features this CPT supports in Post Editor
         'supports'            => array( 'title', 'editor', 'author', ),
@@ -53,7 +55,7 @@ class Wrestleefedmanager_Federation {
         'show_in_menu'        => true,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
-        'menu_position'       => 5,
+        'menu_position'       => 17,
         'can_export'          => true,
         'has_archive'         => true,
         'exclude_from_search' => false,
@@ -108,6 +110,7 @@ class Wrestleefedmanager_Federation {
 		<?php
 	}
 	
+	
 	function fed_parent(){
 	}
 	
@@ -133,6 +136,20 @@ class Wrestleefedmanager_Federation {
 		update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
 	}
 	
+	function display_federation_template ($template_path) {
+		if ( get_post_type() == 'feds' ) {
+        if ( is_single() ) {
+            // checks if the file exists in the theme first,
+            // otherwise serve the file from the plugin
+            if ( $theme_file = locate_template( array ( 'single-feds.php' ) ) ) {
+                $template_path = $theme_file;
+            } else {
+                $template_path = plugin_dir_path( __FILE__ ) . '/single-feds.php';
+            }
+        }
+    }
+    return $template_path;
+	}
 	
 }
 
