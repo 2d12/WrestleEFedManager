@@ -79,7 +79,7 @@ class Wrestleefedmanager_Worker {
 
 		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");		
 		add_meta_box("alignment", "Alignment", array( $this, 'worker_alignment'), "workers", "side", "low");		
-		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weight'), "workers", "side", "low");
+		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weightclass'), "workers", "side", "low");
 		add_meta_box("division", "Division", array( $this, 'worker_division'), "workers", "side", "low");		
 		add_meta_box("birthday", "Birthday", array( $this, 'worker_birthday'), "workers", "side", "low");		
 		add_meta_box("height", "Height", array( $this, 'worker_height'), "workers", "side", "low");		
@@ -94,7 +94,7 @@ class Wrestleefedmanager_Worker {
 	function worker_associates() {}
 	function worker_portrait() {}
 	function worker_alignment() {}
-	function worker_weight() {}
+	function worker_weightclass() {}
 	function worker_division() {}
 	function worker_birthday() {}
 	function worker_height() {}

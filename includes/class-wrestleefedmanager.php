@@ -111,14 +111,14 @@ class Wrestleefedmanager {
 	 */
 	private function load_dependencies() {
 		
-		$this->loader = new Wrestleefedmanager_Loader();		
-	
+		
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wrestleefedmanager-loader.php';
-
+		$this->loader = new Wrestleefedmanager_Loader();		
+	
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
@@ -145,7 +145,7 @@ class Wrestleefedmanager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
 		$this->worker_type = new Wrestleefedmanager_Worker();
 		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-weightclass.php';		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_weight-class/class-wrestleefedmanager-weightclass.php';		
 		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
 
 	}
