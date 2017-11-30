@@ -88,6 +88,21 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");		
 		}
 	
+	function worker_aka() {}
+	function worker_theme() {}
+	function worker_signature() {}
+	function worker_associates() {}
+	function worker_portrait() {}
+	function worker_alignment() {}
+	function worker_weight() {}
+	function worker_division() {}
+	function worker_birthday() {}
+	function worker_height() {}
+	function worker_weight() {}
+	function worker_gender() {}
+	function worker_position() {}
+	/*
+	
 	function fed_abbr(){
 		global $post;
 		$custom = get_post_custom($post->ID);
@@ -158,6 +173,6 @@ class Wrestleefedmanager_Worker {
     }
     return $template_path;
 	}
-	
+	*/
 }
 endif;
