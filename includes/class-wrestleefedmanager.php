@@ -65,6 +65,9 @@ class Wrestleefedmanager {
 	 * @var      Wrestleefedmanager_Federation   $federation_type    Used just for constructor.
 	 */
 	protected $federation_type;
+	
+	protected $worker_type;
+	protected $weightclass_type;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -107,7 +110,9 @@ class Wrestleefedmanager {
 	 * @access   private
 	 */
 	private function load_dependencies() {
-
+		
+		$this->loader = new Wrestleefedmanager_Loader();		
+	
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
@@ -134,10 +139,14 @@ class Wrestleefedmanager {
 		/**
 		 * The classes responsible for defining the various post types.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-wrestleefedmanager-federation.php';
-		
-		$this->loader = new Wrestleefedmanager_Loader();
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-wrestleefedmanager-federation.php';		
 		$this->federation_type = new Wrestleefedmanager_Federation();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
+		$this->worker_type = new Wrestleefedmanager_Worker();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-weightclass.php';		
+		$this->weightclass_type = new Wrestleefedmanager_WeightClass()
 
 	}
 
