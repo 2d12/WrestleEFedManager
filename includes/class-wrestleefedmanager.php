@@ -146,7 +146,7 @@ class Wrestleefedmanager {
 		$this->worker_type = new Wrestleefedmanager_Worker();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-weightclass.php';		
-		$this->weightclass_type = new Wrestleefedmanager_WeightClass()
+		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
 
 	}
 
