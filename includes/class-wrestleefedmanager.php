@@ -139,14 +139,16 @@ class Wrestleefedmanager {
 		/**
 		 * The classes responsible for defining the various post types.
 		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_weight-class/class-wrestleefedmanager-weightclass.php';		
+		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-wrestleefedmanager-federation.php';		
 		$this->federation_type = new Wrestleefedmanager_Federation();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
 		$this->worker_type = new Wrestleefedmanager_Worker();
 		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_weight-class/class-wrestleefedmanager-weightclass.php';		
-		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
+
 
 	}
 

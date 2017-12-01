@@ -133,7 +133,7 @@ class Wrestleefedmanager_Admin {
 	 /* /$settings_link = array(
 		'<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_name ) . '">' . __('Settings', $this->plugin_name) . '</a>',
 	   );*/
-	   return array_merge(  $settings_link, $links );
+	   return $links; //array_merge(  $settings_link, $links );
 
 	}
 

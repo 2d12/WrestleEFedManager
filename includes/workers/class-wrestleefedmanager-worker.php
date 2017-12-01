@@ -18,6 +18,21 @@ class Wrestleefedmanager_Worker {
 		add_filter ('template_include', array($this, 'display_worker_template' ) );
 	}
 	
+	function display_worker_template ($template_path) {
+		if ( get_post_type() == 'workers' ) {
+        if ( is_single() ) {
+            // checks if the file exists in the theme first,
+            // otherwise serve the file from the plugin
+            if ( $theme_file = locate_template( array ( 'single-worker.php' ) ) ) {
+                $template_path = $theme_file;
+            } else {
+                $template_path = plugin_dir_path( __FILE__ ) . '/single-worker.php';
+				}
+			}
+		}
+	}
+    
+	
 	// Our custom post type function
 	function create_worker_post_type() {
 	 
@@ -44,7 +59,7 @@ class Wrestleefedmanager_Worker {
         // Features this CPT supports in Post Editor
         'supports'            => array( 'title', 'editor', 'author', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'alignment', 'weightclass', 'division', 'position' ),
+        'taxonomies'          => array( 'weightclass' ),
         /* A hierarchical CPT is like Pages and can have
         * Parent and child items. A non-hierarchical CPT
         * is like Posts.
@@ -94,7 +109,12 @@ class Wrestleefedmanager_Worker {
 	function worker_associates() {}
 	function worker_portrait() {}
 	function worker_alignment() {}
-	function worker_weightclass() {}
+	function worker_weightclass() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$wc = $custom["weightclass"][0];
+		the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' );
+	}
 	function worker_division() {}
 	function worker_birthday() {}
 	function worker_height() {}
@@ -102,6 +122,8 @@ class Wrestleefedmanager_Worker {
 	function worker_gender() {}
 	function worker_position() {}
 	/*
+	<?php the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' ); ?>
+	
 	
 	function fed_abbr(){
 		global $post;
