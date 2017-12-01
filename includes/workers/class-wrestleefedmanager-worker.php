@@ -57,9 +57,9 @@ class Wrestleefedmanager_Worker {
         'description'         => __( 'Employees' ),
         'labels'              => $workerlabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor', 'author', ),
+        'supports'            => array( 'title', 'editor', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'weightclass' ),
+        'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
         /* A hierarchical CPT is like Pages and can have
         * Parent and child items. A non-hierarchical CPT
         * is like Posts.
@@ -91,36 +91,86 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("theme", "Theme Song", array( $this, 'worker_theme'), "workers", "normal", "low");
 		add_meta_box("signatures", "Signature and Finishing Moves", array( $this, 'worker_signature'), "workers", "normal", "low");
 		add_meta_box("associates", "Associates", array( $this, 'worker_associates'), "workers", "normal", "low");
-
 		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");		
-		add_meta_box("alignment", "Alignment", array( $this, 'worker_alignment'), "workers", "side", "low");		
-		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weightclass'), "workers", "side", "low");
-		add_meta_box("division", "Division", array( $this, 'worker_division'), "workers", "side", "low");		
 		add_meta_box("birthday", "Birthday", array( $this, 'worker_birthday'), "workers", "side", "low");		
 		add_meta_box("height", "Height", array( $this, 'worker_height'), "workers", "side", "low");		
 		add_meta_box("weight", "Weight", array( $this, 'worker_weight'), "workers", "side", "low");		
-		add_meta_box("gender", "Gender", array( $this, 'worker_gender'), "workers", "side", "low");		
 		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");		
 		}
 	
-	function worker_aka() {}
-	function worker_theme() {}
-	function worker_signature() {}
-	function worker_associates() {}
-	function worker_portrait() {}
-	function worker_alignment() {}
-	function worker_weightclass() {
+	function worker_aka() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$wc = $custom["weightclass"][0];
-		the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' );
+		$aka = $custom["aka"][0];
+		?>
+		<input name="worker_aka" type="text" size="150" value="<?php echo $aka; ?>" />
+		<?php
 	}
-	function worker_division() {}
-	function worker_birthday() {}
-	function worker_height() {}
-	function worker_weight() {}
-	function worker_gender() {}
-	function worker_position() {}
+	function worker_theme() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$themename = $custom["themename"][0];
+		$themeartist = $custom["themeartist"][0];
+		$themelink = $custom["themelink"][0];
+		
+		?>
+		<table>
+		<tr><td><label>Name:</label><td><td><input name="worker_theme_name" type="text" size="150" value="<?php echo $themename; ?>" /></td></tr>
+		<tr><td><label>Artist:</label><td><td><input name="worker_theme_artist" type="text" size="150" value="<?php echo $themeartist; ?>" /></td></tr>
+		<tr><td><label>Link:</label><td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
+		</table>
+		<?php
+	}
+	function worker_signature() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$signatures = $custom["signatures"][0];
+		?>
+		<input name="worker_signatures" type="text" size="150" value="<?php echo $signatures; ?>" />
+		<?php
+	}
+	function worker_associates() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$associates = $custom["associates"][0];
+		?>
+		<input name="worker_associates" type="text" size="150" value="<?php echo $associates; ?>" />
+		<?php
+	}
+	function worker_portrait() {}
+	function worker_birthday() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$birth = $custom["birth"][0];
+		?>
+		<input name="worker_birth" type="text" value="<?php echo $birth; ?>" />
+		<?php
+	}
+	function worker_height() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$height = $custom["height"][0];
+		?>
+		<input name="worker_height" type="text" value="<?php echo $height; ?>" />
+		<?php
+	}
+	function worker_weight() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$weight = $custom["weight"][0];
+		?>
+		<input name="worker_weight" type="text" value="<?php echo $weight; ?>" />
+		<?php
+	}
+	
+	function worker_position() {
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$staffpos = $custom["staffpos"][0];
+		?>
+		<input name="worker_staffpos" type="text" value="<?php echo $staffpos; ?>" />
+		<?php
+	}
 	/*
 	<?php the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' ); ?>
 	
