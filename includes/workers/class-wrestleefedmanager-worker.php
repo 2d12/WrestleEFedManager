@@ -23,13 +23,14 @@ class Wrestleefedmanager_Worker {
         if ( is_single() ) {
             // checks if the file exists in the theme first,
             // otherwise serve the file from the plugin
-            if ( $theme_file = locate_template( array ( 'single-worker.php' ) ) ) {
+            if ( $theme_file = locate_template( array ( 'single-workers.php' ) ) ) {
                 $template_path = $theme_file;
             } else {
-                $template_path = plugin_dir_path( __FILE__ ) . '/single-worker.php';
+                $template_path = plugin_dir_path( __FILE__ ) . '/single-workers.php';
 				}
 			}
 		}
+	return $template_path;
 	}
     
 	
@@ -171,65 +172,28 @@ class Wrestleefedmanager_Worker {
 		<input name="worker_staffpos" type="text" value="<?php echo $staffpos; ?>" />
 		<?php
 	}
+	
+	function save_worker(){
+		global $post;
+		
+		update_post_meta($post->ID, "aka", $_POST["worker_aka"]);
+		update_post_meta($post->ID, "birth", $_POST["worker_birth"]);
+		update_post_meta($post->ID, "height", $_POST["worker_height"]);
+		update_post_meta($post->ID, "weight", $_POST["worker_weight"]);
+		update_post_meta($post->ID, "associates", $_POST["worker_associates"]);
+		update_post_meta($post->ID, "signatures", $_POST["worker_signatures"]);
+		update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
+		update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
+		update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
+		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);		
+	}
+	
 	/*
 	<?php the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' ); ?>
 	
 	
-	function fed_abbr(){
-		global $post;
-		$custom = get_post_custom($post->ID);
-		$abbr = $custom["abbreviation"][0];
-		?>
-		<label>Abbr:</label>
-		<input name="fed_abbreviation" type="text" value="<?php echo $abbr; ?>" />
-		<?php
-		}
 	
-	function fed_founded(){
-		global $post;
-		$custom = get_post_custom($post->ID);
-		$founded = $custom["founded"][0];
-		?>
-		<label>Founded:</label>
-		<input name="fed_founddate" value="<?php echo $founded; ?>" />
-		<?php
-	}
-	
-	function fed_closed(){
-		global $post;
-		$custom = get_post_custom($post->ID);
-		$closed = $custom["closed"][0];
-		?>
-		<label>Closed:</label>
-		<input name="fed_closedate" value="<?php echo $closed; ?>" />
-		<?php
-	}
-	
-	
-	function fed_parent(){
-	}
-	
-	function fed_logo(){
-	}
-	
-	function fed_owner(){
-		global $post;
-		$custom = get_post_custom($post->ID);
-		$owner = $custom["owner"][0];
-		?>
-		<label>Owner:</label>
-		<input name="fed_owner" value="<?php echo $owner; ?>" />
-		<?php
-	}
-	
-	function save_fed(){
-		global $post;
-		
-		update_post_meta($post->ID, "abbreviation", $_POST["fed_abbreviation"]);
-		update_post_meta($post->ID, "founded", $_POST["fed_founddate"]);
-		update_post_meta($post->ID, "closed", $_POST["fed_closedate"]);
-		update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
-	}
+
 	
 	function display_federation_template ($template_path) {
 		if ( get_post_type() == 'feds' ) {
