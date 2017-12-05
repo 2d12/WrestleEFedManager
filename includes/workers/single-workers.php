@@ -130,6 +130,14 @@ get_header(); ?>
 					}	
 					echo "<br />";
 					the_content();
+					echo "<br />";
+					
+					if (strlen(get_post_meta( get_the_ID(), 'associates', true )) > 0)
+					{
+						echo "<b>Associates: </b>";
+						echo get_post_meta( get_the_ID(), 'associates', true );
+						echo "<br />";
+					}	
 					?>
 				</div>
 			</div>
