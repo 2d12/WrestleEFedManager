@@ -116,9 +116,9 @@ class Wrestleefedmanager_Worker {
 		
 		?>
 		<table>
-		<tr><td><label>Name:</label><td><td><input name="worker_theme_name" type="text" size="150" value="<?php echo $themename; ?>" /></td></tr>
-		<tr><td><label>Artist:</label><td><td><input name="worker_theme_artist" type="text" size="150" value="<?php echo $themeartist; ?>" /></td></tr>
-		<tr><td><label>Link:</label><td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
+		<tr><td><label>Name:</label></td><td><input name="worker_theme_name" type="text" size="150" value="<?php echo $themename; ?>" /></td></tr>
+		<tr><td><label>Artist:</label></td><td><input name="worker_theme_artist" type="text" size="150" value="<?php echo $themeartist; ?>" /></td></tr>
+		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
 		</table>
 		<?php
 	}

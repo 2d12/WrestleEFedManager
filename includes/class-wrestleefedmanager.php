@@ -13,6 +13,7 @@
  * @subpackage Wrestleefedmanager/includes
  */
 
+ 
 /**
  * The core plugin class.
  *
@@ -73,7 +74,10 @@ class Wrestleefedmanager {
 	protected $gender_type;
 	protected $title_type;
 	protected $event_type;
+	protected $match_type;
 
+	
+	
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -167,6 +171,9 @@ class Wrestleefedmanager {
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
 		$this->worker_type = new Wrestleefedmanager_Worker();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/matches/class-wrestleefedmanager-match.php';		
+		$this->match_type = new Wrestleefedmanager_Match();
 		
 
 
@@ -268,4 +275,5 @@ class Wrestleefedmanager {
 		return $this->version;
 	}
 
+	
 }

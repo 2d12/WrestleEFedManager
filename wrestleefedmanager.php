@@ -8,13 +8,13 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://www.2d12.com
+ * @link              https://github.com/2d12/WrestleEFedManager
  * @since             1.0.0
  * @package           Wrestleefedmanager
  *
  * @wordpress-plugin
  * Plugin Name:       WrestleEFed Manager
- * Plugin URI:        http://www.2d12.com
+ * Plugin URI:        https://github.com/2d12/WrestleEFedManager
  * Description:       Establishes a usable history for a wrestling e-fed, including the ability to store multiple federations,
  *                    workers, titles (with histories), events, and match history.
  * Version:           1.0.0
@@ -73,7 +73,54 @@ function run_wrestleefedmanager() {
 
 	$plugin = new Wrestleefedmanager();
 	$plugin->run();
-
 }
+
+ function efed_list_posts($args)
+	{
+        $lastposts = get_posts($args);
+		$string = "";
+        foreach($lastposts as $thispost)
+		{
+			setup_postdata($thispost);
+
+			$string = $string . "<li";
+			if ( $thispost->ID == $wp_query->post->ID ) 
+				{
+					$string = $string . " class=\"current\""; 
+				}
+			
+			$string = $string . ">";
+			$string = $string . "<a href=";
+			$string = $string . "\"" . get_permalink($thispost->ID) . "\">" . get_the_title($thispost->ID) . "</a>";
+			$string = $string . "</li>";    
+		}
+		
+		return $string;
+	}
+
+ function wpb_list_child_matches() 
+		{ 
+		global $post; 		 
+		$args = array(
+			post_type => 'match',
+			order_by => 'parent menu_order',
+			order => 'ASC',
+			post_parent => $post->ID,
+			post_status => 'publish',
+			posts_per_page => -1,			
+		);
+		if (is_singular('match') ) {
+		//if ( is_page() && $post->post_parent )	
+		// wp_list_pages() 
+			//$lastposts = get_posts('sort_column=menu_order&title_li=&child_of=' . $post->post_parent . '&echo=0');			
+			$childpages = efed_list_posts( $args );
+			if ($childpages)
+			{
+				$string = '<ul>' . $childpages . '</ul>';
+			}
+		}
+		wp_reset_postdata();
+		return $string;
+		}
 
 run_wrestleefedmanager();
