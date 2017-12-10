@@ -98,8 +98,9 @@ function run_wrestleefedmanager() {
 		return $string;
 	}
 
- function wpb_list_child_matches() 
+ function efed_list_child_matches() 
 		{ 
+		wp_reset_postdata();
 		global $post; 		 
 		$args = array(
 			post_type => 'match',
@@ -122,5 +123,87 @@ function run_wrestleefedmanager() {
 		wp_reset_postdata();
 		return $string;
 		}
+		
+function efed_previous_match($show_title = false)
+	{
+		wp_reset_postdata();
+		global $post; 		 
+		$args = array(
+			post_type => 'match',
+			order_by => 'menu_order',
+			order => 'ASC',
+			post_parent => $post->post_parent,
+			post_status => 'publish',
+			posts_per_page => -1,			
+		);
+		
+		$originalID = $post->ID;
+		
+		$lastposts = get_posts($args);
+		$string = "";
+		foreach($lastposts as $thispost)
+		{
+
+			setup_postdata($thispost);
+			if ( $thispost->ID == $originalID ) 
+				{
+					 break;
+				}	
+			if ($show_title)
+			{
+				$title = "&laquo; " . $thispost->title;
+			}
+			else
+			{
+				$title = "&laquo; Previous";
+			}
+			$string = " <a href=\"" . get_permalink($thispost->ID) . "\">" . $title . "</a>";
+		}
+		wp_reset_postdata();
+		return $string;
+	}
+	
+function efed_next_match($show_title = false)
+	{
+		wp_reset_postdata();
+		global $post; 		 
+		$args = array(
+			post_type => 'match',
+			order_by => 'menu_order',
+			order => 'ASC',
+			post_parent => $post->post_parent,
+			post_status => 'publish',
+			posts_per_page => -1,			
+		);
+		$lastposts = get_posts($args);
+		$string = "";
+		$nextpost = false;
+        foreach($lastposts as $thispost)
+		{
+			setup_postdata($thispost);
+			if ($show_title)
+			{
+				$title = $thispost->title . "&raquo;";
+			}
+			else
+			{
+				$title = "Next &raquo;";
+			}
+			if ($nextpost)
+			{
+				$string = "<a href=\"" . get_permalink($thispost->ID) . "\">" . $title . "</a>";
+				break;
+			}
+			else
+			{
+				if ( $thispost->ID == $post->ID ) 
+					{
+						 $nextpost = true;
+					}
+			}
+		}
+		wp_reset_postdata();
+		return  $string;
+	}
 
 run_wrestleefedmanager();

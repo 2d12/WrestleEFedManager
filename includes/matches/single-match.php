@@ -35,6 +35,12 @@ get_header(); ?>
 					}
 					</script>
 					
+					<?php 
+					if (get_post_meta( get_the_ID(), 'victors', true ) != "" || get_post_meta( get_the_ID(), 'time', true ) != "" || 
+						get_post_meta( get_the_ID(), 'finisher', true ) != "" || get_post_meta( get_the_ID(), 'referee', true ) != "")
+						{
+					?>
+					
 					<div id="clicktoshow"><button onclick="myFunction()">Results</button></div>
 					<div id="results" style="display:none; background: #e5e5e5;">
 					Results: 
@@ -49,14 +55,28 @@ get_header(); ?>
 						echo get_post_meta( get_the_ID(), 'referee', true );
 						echo "<br />";
 						echo get_post_meta( get_the_ID(), 'titledefense', true );
+						}
 					?>
 					</div>
 					
+					<div style="position: absolute;left:0;bottom: 8px;width:100%;">
+						<div style="text-align:center;margin:auto;"> 
+						<?php  
+						if ( $post->post_parent ) 
+						{ ?>
+							<a href="<?php echo get_permalink( $post->post_parent ); ?>" >
+							<?php echo get_the_title( $post->post_parent ); ?>
+							</a>
+						<?php } ?>
+						</div>
+					</div>
+					<div style="position: absolute;bottom: 8px;left: 8px"> <?php echo efed_previous_match(); ?></div>
+					<div style="position: absolute;bottom: 8px;right: 8px"> <?php echo efed_next_match(); ?></div>
+					
 					<?php 
-					wp_reset_postdata();
 					echo "<br />";
 					
-					echo wpb_list_child_matches();
+					echo efed_list_child_matches();
 					?>
 				</div>
 			</div>
