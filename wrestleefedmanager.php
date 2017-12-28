@@ -205,5 +205,183 @@ function efed_next_match($show_title = false)
 		wp_reset_postdata();
 		return  $string;
 	}
+	
+function efed_select_from_entries($varname, $postType, $selected, $multiple=false, $use_hierarchy=false)
+{	
+	$args = array(
+			post_type => $postType,
+			orderby => 'title',
+			order => 'ASC',
+			post_status => 'publish',
+			posts_per_page => -1,	
+		);
+		
+		if ($use_hierarchy)
+		{
+				$args[post_parent] = 0;
+		}
+		
+		
+		$lastposts = get_posts($args);
+		$retarr = array();
+		foreach($lastposts as $thispost)
+		{
+			$retarr[] = array(
+				'title' => $thispost->post_title, 
+				'id' => $thispost->ID,
+				);
+		}
+		if (count($retarr) > 0)
+		{	
+			echo '<select name="' . $varname;
+			if ($multiple)
+			{
+				echo '[]" multiple';
+			}
+			else
+			{
+				echo '"';
+			}
+			echo ' style="width:100%;box-sizing:border-box;">';
+			if (!$multiple) echo '<option value="">&nbsp;</option>';
+			efed_get_options($postType, $retarr, $selected, $use_hierarchy);
+			/*foreach ($retarr as $entry)
+			{
+				echo '<option value="' . $entry['id'] . '"';
+				if ($entry['id'] == $selected || (is_array($selected) && in_array($entry['id'], $selected)))
+				{
+					echo ' selected';
+				}
+				
+				echo '>';
+			    echo $entry['title'] . '</option>';
+				
+				if ($use_hierarchy)
+				{
+					
+				}
+			}*/
+			
+			echo '</select>';
+			//echo $SelectedValuesToOutput;
+		}
+		else
+		{
+			echo 'No options to choose.<br />';
+		}
+}
 
+function efed_get_options($postType, $option_array, $selected, $hierarchy, $level = 1)
+{
+	foreach ($option_array as $entry)
+		{
+			echo '<option value="' . $entry['id'] . '"';
+			if ($entry['id'] == $selected || (is_array($selected) && in_array($entry['id'], $selected)))
+			{
+				echo ' selected';
+			}
+			
+			echo '>';
+			echo $entry['title'] . '</option>';
+			
+			if ($hierarchy)
+			{
+				$args = array(
+					post_type => $postType,
+					orderby => 'title',
+					order => 'ASC',
+					post_status => 'publish',
+					posts_per_page => -1,	
+					post_parent => $entry['id'],
+				);
+				$lastposts = get_posts($args);
+				
+				$retarr = array();
+				$prefix = '';
+				for ($i = 1; $i <= $level; $i++)
+				{
+					$prefix = $prefix . "&mdash;";
+				}
+				foreach($lastposts as $thispost)
+				{
+					$retarr[] = array(
+						'title' => $prefix . $thispost->post_title, 
+						'id' => $thispost->ID,
+						);
+				}
+			
+			if (count($retarr) > 0)
+				{
+					efed_get_options($postType, $retarr, $selected, $hierarchy, $level + 1);
+				}
+			}
+		}
+}
+	
+function efed_get_all_federations()
+{
+		//wp_reset_postdata();
+		//global $post; 		 
+		$args = array(
+			post_type => 'feds',
+			order_by => 'title',
+			order => 'ASC',
+			post_status => 'publish',
+			posts_per_page => -1,			
+		);
+		$lastposts = get_posts($args);
+		//return array(array('title'=>"Fake World Wrestling Entertainment",'abbr'=>"WWE"),
+		//			array('title'=>count($lastposts), 'abbr'=>"PWA"));
+		$retarr = array();
+		//echo 'POSTCOUNT:' . count($lastposts) . '<br />';
+		foreach($lastposts as $thispost)
+		{
+			//echo $thispost->title . " -- " ; //$thispost->get_post_meta($thispost->ID, 'abbr', true) . '<br />';
+			$retarr[] = array(
+				'title' => $thispost->post_title, 
+				'id' => $thispost->ID,//$thispost->get_post_meta($thispost->ID, 'abbr', true),
+				);
+				
+			$index++;
+		}
+		//echo 'FEDCOUNT:' . count($retarr) . '<br />';
+		//wp_reset_postdata();
+		return $retarr;
+}
+
+function efed_get_all_taxonomy_values($taxonomy)
+{
+/*	$args=array(
+		'public'   => true,
+		'_builtin' => false
+		);
+	$output = 'names';
+	$operator = 'and';
+	$taxonomies=get_taxonomies($args,$output,$operator); 
+	if  ($taxonomies) 
+	{
+		foreach ($taxonomies  as $tax ) 
+		{*/
+			$retarr = array();
+			$terms = get_terms([
+				'taxonomy' => $taxonomy,
+				'hide_empty' => false,
+				]);
+			
+			$terms = get_terms($tax);
+			foreach ( $terms as $term) 
+			{
+				$retarr[] = array(
+					'title' => $term->name,
+					'ID' => $term->name,
+					);
+			}
+			
+			return $retarr;
+		//}
+	//}
+}
+
+
+	
 run_wrestleefedmanager();

@@ -7,10 +7,10 @@ get_header(); ?>
 <div id="primary" class="content-area content-area-no-sidebar">
     <div id="content" role="main"> 
     <?php
-    //$mypost = array( 'post_type' => 'workers', );
-    //$loop = new WP_Query( $mypost );
+    $mypost = array( 'post_type' => 'workers', );
+    $loop = new WP_Query( $mypost );
     ?>
-    <?php //while ( $loop->have_posts() ) : $loop->the_post();?>
+    <?php while ( $loop->have_posts() ) : $loop->the_post();?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php if ( ! is_single() ) { ?><a href="<?php echo esc_url( get_permalink() ); ?>"><?php } ?>
 
@@ -30,35 +30,35 @@ get_header(); ?>
 
 					<!-- Sidebar Data -->
 					<div style="float: right; width: 27%; margin:0 0 10px 10px; padding: 5px 0;">
-				
+					
 						<!-- Display class data in right-aligned floating div -->
 												
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
-							<table>
-								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
-								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>
-								
-							</table>
+							<dl>
+								<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Alignment:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php the_terms( get_the_ID(), 'alignment', '', ', ', ' ' ); ?></dt>
+								<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Weight Class:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php the_terms( get_the_ID(), 'weightclass', '', ', ', ' ' ); ?></dt>
+								<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Division:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php the_terms( get_the_ID(), 'division', '', ', ', ' ' ); ?></dt>
+							</dl>
 						</div>	
 						
 						<!-- Display vital statistics in right-aligned floating div -->
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
-							<table>
-								<tr><td>Gender:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'gender', true )); ?></td></tr>
+							<dl>
+								<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Gender:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php the_terms( get_the_ID(), 'gender', '', ', ', ' ' ); ?></dt>
 								<?php if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
 									?>
-									<tr><td>Height:</td><td><?php echo get_post_meta( get_the_ID(), 'height', true ); ?></td></tr>
+									<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Height:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php echo get_post_meta( get_the_ID(), 'height', true ); ?></dt>
 								<?php }
 								if (strlen(get_post_meta( get_the_ID(), 'weight', true )) > 0) {
 									?>
-									<tr><td>Weight:</td><td><?php echo get_post_meta( get_the_ID(), 'weight', true ); ?></td></tr>
+									<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Weight:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php echo get_post_meta( get_the_ID(), 'weight', true ); ?></dt>
 								<?php }
 								if (strlen(get_post_meta( get_the_ID(), 'birth', true )) > 0) {
 									?>
-									<tr><td>Birthday:</td><td><?php echo get_post_meta( get_the_ID(), 'birth', true ); ?></td></tr>
+									<dd style="float: left; width: 50%; padding: 0 5px; margin: 0">Birthday:</dd><dt style="float: left; width: 50%; padding: 0 5px; margin: 0"><?php echo get_post_meta( get_the_ID(), 'birth', true ); ?></dt>
 								<?php }
 								 ?>
-							</table>
+							</dl>
 						</div>
 						
 											
@@ -66,7 +66,7 @@ get_header(); ?>
 				
 				<!-- Display contents -->
 				<div class="entry-content">
-
+					
 					<?php
 					
 					if (strlen(get_post_meta( get_the_ID(), 'themelink', true )) > 0)
@@ -129,7 +129,6 @@ get_header(); ?>
 						echo "<br />";
 					}	
 					echo "<br />";
-					wp_reset_postdata();
 					the_content();
 					echo "<br />";
 					
@@ -144,7 +143,7 @@ get_header(); ?>
 			</div>
 		</article>
  
-    <?php //endwhile; ?>
+    <?php endwhile; ?>
 	</div>
 </div>
 <?php wp_reset_query(); ?>

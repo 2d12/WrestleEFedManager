@@ -22,17 +22,17 @@ class Wrestleefedmanager_Federation {
 	function create_federation_post_type() {
 	 
 	 $fedlabels = array(
-        'name'                => _x( 'Federations', 'Post Type General Name'),
-        'singular_name'       => _x( 'Federation', 'Post Type Singular Name'),
-        'menu_name'           => __( 'Federations'),
-        'parent_item_colon'   => __( 'Parent Fed'),
-        'all_items'           => __( 'All Feds'),
-        'view_item'           => __( 'View Fed'),
-        'add_new_item'        => __( 'Add New Fed'),
+        'name'                => _x( 'Federations/Divisions', 'Post Type General Name'),
+        'singular_name'       => _x( 'Fed/Div', 'Post Type Singular Name'),
+        'menu_name'           => __( 'Feds/Divs'),
+        'parent_item_colon'   => __( 'Parent Federation'),
+        'all_items'           => __( 'All Feds & Divisions'),
+        'view_item'           => __( 'View Federation/Division'),
+        'add_new_item'        => __( 'Add New Federation/Division'),
         'add_new'             => __( 'Add New'),
-        'edit_item'           => __( 'Edit Fed'),
-        'update_item'         => __( 'Update Fed'),
-        'search_items'        => __( 'Search Feds'),
+        'edit_item'           => __( 'Edit Federation/Division'),
+        'update_item'         => __( 'Update Federation or Division'),
+        'search_items'        => __( 'Search Feds and Divisions'),
         'not_found'           => __( 'Not Found'),
         'not_found_in_trash'  => __( 'Not found in Trash'),
     );
@@ -42,7 +42,7 @@ class Wrestleefedmanager_Federation {
         'description'         => __( 'Wrestling Companies' ),
         'labels'              => $fedlabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor', 'author', ),
+        'supports'            => array( 'title', 'editor', 'page-attributes', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
         //'taxonomies'          => array( 'genres' ),
         /* A hierarchical CPT is like Pages and can have
@@ -75,7 +75,6 @@ class Wrestleefedmanager_Federation {
 		add_meta_box("abbreviation", "Abbreviation", array( $this, 'fed_abbr'), "feds", "normal", "low");
 		add_meta_box("founded", "Founded", array( $this, 'fed_founded'), "feds", "side", "low");
 		add_meta_box("closed", "Closed", array( $this, 'fed_closed'), "feds", "side", "low");
-		add_meta_box("parentfed", "Parent Federation", array( $this, 'fed_parent'), "feds", "normal", "low");
 		add_meta_box("logo", "Logo", array( $this, 'fed_logo'), "feds", "normal", "low");
 		add_meta_box("owner", "Owner", array( $this, 'fed_owner'), "feds", "side", "low");		
 	}

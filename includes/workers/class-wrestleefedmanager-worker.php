@@ -60,7 +60,7 @@ class Wrestleefedmanager_Worker {
         // Features this CPT supports in Post Editor
         'supports'            => array( 'title', 'editor', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
+        //'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
         /* A hierarchical CPT is like Pages and can have
         * Parent and child items. A non-hierarchical CPT
         * is like Posts.
@@ -92,7 +92,12 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("theme", "Theme Song", array( $this, 'worker_theme'), "workers", "normal", "low");
 		add_meta_box("signatures", "Signature and Finishing Moves", array( $this, 'worker_signature'), "workers", "normal", "low");
 		add_meta_box("associates", "Associates", array( $this, 'worker_associates'), "workers", "normal", "low");
-		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");		
+		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");
+		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weightclass'), "workers", "side", "low");
+		add_meta_box("gender", "Gender", array( $this, 'worker_gender'), "workers", "side", "low");
+		add_meta_box("alignment", "Alignment", array( $this, 'worker_alignment'), "workers", "side", "low");
+		add_meta_box("division", "Company/Division", array( $this, 'worker_division'), "workers", "side", "low");
+		
 		add_meta_box("birthday", "Birthday", array( $this, 'worker_birthday'), "workers", "side", "low");		
 		add_meta_box("height", "Height", array( $this, 'worker_height'), "workers", "side", "low");		
 		add_meta_box("weight", "Weight", array( $this, 'worker_weight'), "workers", "side", "low");		
@@ -121,6 +126,36 @@ class Wrestleefedmanager_Worker {
 		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
 		</table>
 		<?php
+	}
+	
+	function worker_weightclass()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$wc = $custom["weightclass"][0];
+		//echo 'Saved value : ' . $wc . '<br />';
+		efed_select_from_entries('worker_weightclass', 'weightclasses', $wc);
+	}
+	function worker_alignment()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$align = $custom["alignment"][0];
+		efed_select_from_entries('worker_alignment', 'alignments', $align);
+	}
+	function worker_gender()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$gender = $custom["gender"][0];
+		efed_select_from_entries('worker_gender', 'genders', $gender);
+	}
+	function worker_division()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$div = $custom["division"][0];
+		efed_select_from_entries('worker_division', 'federations', $div, true);
 	}
 	function worker_signature() {
 		global $post;
@@ -185,7 +220,15 @@ class Wrestleefedmanager_Worker {
 		update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
 		update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
 		update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
-		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);		
+		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);			
+		
+		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
+		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
+		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
+		//update_post_meta($post->ID, "division", $_POST["worker_division"]);
+		
+		//echo 'Saved weightclass as ' .  $_POST["worker_weightclass"];
+		//echo 'Saved weightclass as --' . get_post_meta( get_the_ID(), 'weightclass', true) . '--<br />';
 	}
 	
 	/*
