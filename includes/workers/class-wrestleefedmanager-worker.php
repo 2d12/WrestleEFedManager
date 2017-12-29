@@ -155,7 +155,7 @@ class Wrestleefedmanager_Worker {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$div = $custom["division"][0];
-		efed_select_from_entries('worker_division', 'federations', $div, true);
+		efed_select_from_entries('worker_division', 'feds', $div, true, true);
 	}
 	function worker_signature() {
 		global $post;

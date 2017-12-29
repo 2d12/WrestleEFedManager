@@ -58,7 +58,7 @@ class Wrestleefedmanager_Match {
         // Features this CPT supports in Post Editor
         'supports'            => array( 'title', 'editor', 'page-attributes',),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'weightclass', 'division', 'gender', 'title' ),
+        //'taxonomies'          => array( 'weightclass', 'division', 'gender', 'title' ),
         /* A hierarchical CPT is like Pages and can have
         * Parent and child items. A non-hierarchical CPT
         * is like Posts.
@@ -95,18 +95,45 @@ class Wrestleefedmanager_Match {
 	}
 	
 	function initialize_match_page_type() {
-		add_meta_box("competitors", "Competitors (Shortcode OK)", array( $this, 'match_competitors'), "match", "normal", "low");		
+		add_meta_box("competitors", "Competitors", array( $this, 'match_competitors'), "match", "normal", "low");		
 		add_meta_box("results", "Results", array( $this, 'match_results'), "match", "normal", "low");
 		add_meta_box("referee", "Referee", array( $this, 'match_referee'), "match", "side", "low");
 		add_meta_box("rating", "Rating", array( $this, 'match_rating'), "match", "side", "low");
+		
+		add_meta_box("weightclass", "Weight Class", array( $this, 'match_weightclass'), "match", "side", "low");
+		add_meta_box("gender", "Gender", array( $this, 'match_gender'), "match", "side", "low");
+		add_meta_box("division", "Company/Division", array( $this, 'match_division'), "match", "side", "low");
+
 	}	
+	
+	function match_weightclass()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$wc = $custom["weightclass"][0];
+		//echo 'Saved value : ' . $wc . '<br />';
+		efed_select_from_entries('match_weightclass', 'weightclasses', $wc);
+	}
+	function match_gender()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$gender = $custom["gender"][0];
+		efed_select_from_entries('match_gender', 'genders', $gender);
+	}
+	function match_division()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$div = $custom["division"][0];
+		efed_select_from_entries('match_division', 'feds', $div, true, true);
+	}
+	
 	function match_competitors() {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$competitors = $custom["competitors"][0];
-		?>
-		<input name="match_competitors" type="text" size="150" value="<?php echo $competitors; ?>" />
-		<?php
+		efed_select_from_entries('match_competitors', 'workers', $competitors, true);
 	}
 	
 	function match_results() {
@@ -118,7 +145,7 @@ class Wrestleefedmanager_Match {
 		$titledefense = $custom["titledefense"][0];
 		?>
 		<table>
-		<tr><td><label>Victor(s):</label></td><td><input name="match_victors" type="text" size="150" value="<?php echo $victors; ?>" /></td></tr>
+		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', 'workers', $victors, true);?></td></tr>
 		<tr><td><label>Time:</label></td><td><input name="match_time" type="text" size="150" value="<?php echo $time; ?>" /></td></tr>
 		<tr><td><label>Finish:</label></td><td><input name="match_finisher" type="text" size="150" value="<?php echo $finisher; ?>" /></td></tr></table>
 		<input type="radio" id="Non-Title" name="match_defensetype" value="Non-Title" <?php if ($titledefense != "Successful Defense" && $titledefense != "New Champion")echo "checked"; ?>><label for="Non-Title">Non-Title Match</label>

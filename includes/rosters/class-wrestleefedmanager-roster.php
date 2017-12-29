@@ -101,7 +101,6 @@ class Wrestleefedmanager_Roster {
 		$team = $custom["team"][0];
 		$fed = unserialize($custom["federations"][0]);
 		$wc = unserialize($custom["weightclasses"][0]);
-		$div = unserialize($custom["divisions"][0]);
 		$gender = unserialize($custom["genders"][0]);
 		$align = unserialize($custom["alignments"][0]);
 		$showfed = $custom["showfed"][0];
@@ -154,7 +153,6 @@ class Wrestleefedmanager_Roster {
 		
 		update_post_meta($post->ID, "federations", $_POST["roster_federation"]);
 		update_post_meta($post->ID, "weightclasses", $_POST["roster_weightclass"]);
-		update_post_meta($post->ID, "divisions", $_POST["roster_division"]);
 		update_post_meta($post->ID, "genders", $_POST["roster_gender"]);
 		update_post_meta($post->ID, "alignments", $_POST["roster_alignment"]);
 		

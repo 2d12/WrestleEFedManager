@@ -69,19 +69,12 @@ class Wrestleefedmanager {
 	
 	protected $worker_type;
 	protected $weightclass_type;
-	protected $division_type;
 	protected $alignment_type;
 	protected $gender_type;
 	protected $title_type;
 	protected $event_type;
 	protected $match_type;
 	protected $roster_type;
-	protected $alignment_type2;
-	protected $gender_type2;
-	protected $division_type2;
-	protected $weightclass_type2;
-
-	
 	
 	/**
 	 * Define the core functionality of the plugin.
@@ -153,23 +146,6 @@ class Wrestleefedmanager {
 		/**
 		 * The classes responsible for defining the various post types.
 		 */
-		/*require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_weight-class/class-wrestleefedmanager-weightclass.php';		
-		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_divisions/class-wrestleefedmanager-divisions.php';		
-		$this->division_type = new Wrestleefedmanager_division();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_events/class-wrestleefedmanager-events.php';		
-		$this->event_type = new Wrestleefedmanager_event();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_gender/class-wrestleefedmanager-genders.php';		
-		$this->gender_type = new Wrestleefedmanager_gender();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_alignment/class-wrestleefedmanager-alignments.php';		
-		$this->alignment_type = new Wrestleefedmanager_alignment();*/
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_titles/class-wrestleefedmanager-titles.php';		
-		$this->title_type = new Wrestleefedmanager_Title();
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-wrestleefedmanager-federation.php';		
 		$this->federation_type = new Wrestleefedmanager_Federation();
@@ -181,19 +157,19 @@ class Wrestleefedmanager {
 		$this->match_type = new Wrestleefedmanager_Match();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/alignments/class-wrestleefedmanager-alignment.php';		
-		$this->alignment_type2 = new Wrestleefedmanager_Alignment();
-		
-	/*	require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/divisions/class-wrestleefedmanager-division.php';		
-		$this->division_type2 = new Wrestleefedmanager_Division();*/
-		
+		$this->alignment_type = new Wrestleefedmanager_Alignment();
+				
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/genders/class-wrestleefedmanager-gender.php';		
-		$this->gender_type2 = new Wrestleefedmanager_Gender();
+		$this->gender_type = new Wrestleefedmanager_Gender();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/weightclasses/class-wrestleefedmanager-weightclass.php';		
-		$this->weightclass_type2 = new Wrestleefedmanager_WeightClass();
+		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/rosters/class-wrestleefedmanager-roster.php';		
 		$this->roster_type = new Wrestleefedmanager_Roster();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/championships/class-wrestleefedmanager-championship.php';		
+		$this->title_type = new Wrestleefedmanager_Championship();
 
 	}
 
