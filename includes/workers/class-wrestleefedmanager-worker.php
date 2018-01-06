@@ -109,7 +109,7 @@ class Wrestleefedmanager_Worker {
 		$custom = get_post_custom($post->ID);
 		$aka = $custom["aka"][0];
 		?>
-		<input name="worker_aka" type="text" size="150" value="<?php echo $aka; ?>" />
+		<input name="worker_aka" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $aka; ?>" />
 		<?php
 	}
 	function worker_theme() {
@@ -120,10 +120,10 @@ class Wrestleefedmanager_Worker {
 		$themelink = $custom["themelink"][0];
 		
 		?>
-		<table>
-		<tr><td><label>Name:</label></td><td><input name="worker_theme_name" type="text" size="150" value="<?php echo $themename; ?>" /></td></tr>
-		<tr><td><label>Artist:</label></td><td><input name="worker_theme_artist" type="text" size="150" value="<?php echo $themeartist; ?>" /></td></tr>
-		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
+		<table style="width:100%;box-sizing:border-box;">
+		<tr><td><label>Name:</label></td><td><input name="worker_theme_name" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themename; ?>" /></td></tr>
+		<tr><td><label>Artist:</label></td><td><input name="worker_theme_artist" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themeartist; ?>" /></td></tr>
+		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themelink; ?>" /></td></tr>
 		</table>
 		<?php
 	}
@@ -162,7 +162,7 @@ class Wrestleefedmanager_Worker {
 		$custom = get_post_custom($post->ID);
 		$signatures = $custom["signatures"][0];
 		?>
-		<input name="worker_signatures" type="text" size="150" value="<?php echo $signatures; ?>" />
+		<input name="worker_signatures" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $signatures; ?>" />
 		<?php
 	}
 	function worker_associates() {
@@ -170,7 +170,7 @@ class Wrestleefedmanager_Worker {
 		$custom = get_post_custom($post->ID);
 		$associates = $custom["associates"][0];
 		?>
-		<input name="worker_associates" type="text" size="150" value="<?php echo $associates; ?>" />
+		<input name="worker_associates" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $associates; ?>" />
 		<?php
 	}
 	function worker_portrait() {}
@@ -225,7 +225,7 @@ class Wrestleefedmanager_Worker {
 		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
 		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
 		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
-		//update_post_meta($post->ID, "division", $_POST["worker_division"]);
+		update_post_meta($post->ID, "federation", $_POST["worker_division"]);
 		
 		//echo 'Saved weightclass as ' .  $_POST["worker_weightclass"];
 		//echo 'Saved weightclass as --' . get_post_meta( get_the_ID(), 'weightclass', true) . '--<br />';

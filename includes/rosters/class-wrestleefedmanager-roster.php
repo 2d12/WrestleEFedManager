@@ -89,7 +89,15 @@ class Wrestleefedmanager_Roster {
 		add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, 
 		              string $context = 'advanced', string $priority = 'default', array $callback_args = null )*/
 		add_meta_box("filters", "Filters", array( $this, 'roster_filters'), "roster", "normal", "low");
-	
+		add_meta_box("data", "Data", array ($this, 'roster_data'), "roster", "normal", "low");
+		}
+		
+		function roster_data()
+		{
+			global $post;
+			$custom = get_post_custom($post->ID);
+			
+			print_r($custom);
 		}
 
     /**
@@ -99,17 +107,16 @@ class Wrestleefedmanager_Roster {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$team = $custom["team"][0];
-		$fed = unserialize($custom["federations"][0]);
-		$wc = unserialize($custom["weightclasses"][0]);
-		$gender = unserialize($custom["genders"][0]);
-		$align = unserialize($custom["alignments"][0]);
+		$fed = unserialize($custom["fedfilter"][0]);
+		$wc = unserialize($custom["wcfilter"][0]);
+		$gender = unserialize($custom["genderfilter"][0]);
+		$align = unserialize($custom["alignfilter"][0]);
 		$showfed = $custom["showfed"][0];
 		$showwc = $custom["showwc"][0];
-		$showdiv = $custom["showdiv"][0];
 		$showgender = $custom["showgender"][0];
 		$showalign = $custom["showalign"][0];
+
 		?>
-		
 		<table>
 		<tr><td colspan="2">		
 		<input type="radio" id="Individual" name="roster_team" value="individual" <?php if ($team == "individual")echo "checked"; ?>><label for="Individual">Individual</label>
@@ -119,42 +126,40 @@ class Wrestleefedmanager_Roster {
 		</td></tr>
 		<tr><td>
 		<label for="roster_federation">Federations/Divisions</label><br />
-		<input type="checkbox" name="showfed" <?php if ($showfed) echo ' checked'; ?> >Show Column
+		<input type="checkbox" name="showfed"<?php if ($showfed) echo ' checked'; ?>>Show Column
 		</td><td>
 		<?php efed_select_from_entries('roster_federation', 'feds', $fed, true, true); ?>            
 		</td></tr>
 		<tr><td>
 		<label for="roster_weightclass">Weight Classes</label><br />
-		<input type="checkbox" name="showwc" <?php if ($showwc) echo ' checked'; ?> >Show Column
+		<input type="checkbox" name="showwc"<?php if ($showwc) echo ' checked'; ?>>Show Column
 		</td><td>
         <?php efed_select_from_entries('roster_weightclass', 'weightclasses', $wc, true); ?>
 		</td></tr>
 		<tr><td>
 		<label for="roster_gender">Genders</label><br />
-		<input type="checkbox" name="showgender" <?php if ($showgender) echo ' checked'; ?> >Show Column
+		<input type="checkbox" name="showgender"<?php if ($showgender) echo ' checked'; ?>>Show Column
 		</td><td>
 		<?php efed_select_from_entries('roster_gender', 'genders', $gender, true); ?>        
 		</td></tr>
 		<tr><td>
 		<label for="roster_alignment">Alignments</label><br />
-		<input type="checkbox" name="showalign" <?php if ($showalign) echo ' checked'; ?> >Show Column
+		<input type="checkbox" name="showalign"<?php if ($showalign) echo ' checked'; ?>>Show Column
 		</td><td>
 		<?php efed_select_from_entries('roster_alignment', 'alignments', $align, true); ?>
 		</td></tr></table>
 		
 		<?php
-	}
-	
+	}	
 	
 	function save_roster(){
 		global $post;
-		
 		update_post_meta($post->ID, "team", $_POST["roster_team"]);
 		
-		update_post_meta($post->ID, "federations", $_POST["roster_federation"]);
-		update_post_meta($post->ID, "weightclasses", $_POST["roster_weightclass"]);
-		update_post_meta($post->ID, "genders", $_POST["roster_gender"]);
-		update_post_meta($post->ID, "alignments", $_POST["roster_alignment"]);
+		update_post_meta($post->ID, "fedfilter", $_POST["roster_federation"]);
+		update_post_meta($post->ID, "wcfilter", $_POST["roster_weightclass"]);
+		update_post_meta($post->ID, "genderfilter", $_POST["roster_gender"]);
+		update_post_meta($post->ID, "alignfilter", $_POST["roster_alignment"]);
 		
 		$fedtf = $_POST['showfed'] ? true : false;
 		update_post_meta($post->ID, "showfed", $fedtf);
@@ -162,21 +167,11 @@ class Wrestleefedmanager_Roster {
 		$wctf = $_POST['showwc'] ? true : false;
 		update_post_meta($post->ID, "showwc", $wctf);
 		
-		$divtf = $_POST['showdiv'] ? true : false;
-		update_post_meta($post->ID, "showdiv", $divtf);
-		
 		$gendertf = $_POST['showgender'] ? true : false;
 		update_post_meta($post->ID, "showgender", $gendertf);
 		
 		$aligntf = $_POST['showalign'] ? true : false;
 		update_post_meta($post->ID, "showalign", $aligntf);
-		
-		
-//		update_post_meta($post->ID, "aka", $_POST["worker_aka"]);
 	}
-	
-	/*
-	<?php the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' ); ?>
-	*/
 }
 endif;

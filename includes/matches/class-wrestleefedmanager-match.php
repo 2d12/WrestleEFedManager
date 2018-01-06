@@ -91,12 +91,14 @@ class Wrestleefedmanager_Match {
 		update_post_meta($post->ID, "victors", $_POST["match_victors"]);
 		update_post_meta($post->ID, "time", $_POST["match_time"]);
 		update_post_meta($post->ID, "finisher", $_POST["match_finisher"]);
-		update_post_meta($post->ID, "titledefense", $_POST["match_defensetype"]);
+		update_post_meta($post->ID, "title", $_POST["match_title"]);
+		update_post_meta($post->ID, "titleupdate", $_POST["match_title_result"]);
 	}
 	
 	function initialize_match_page_type() {
 		add_meta_box("competitors", "Competitors", array( $this, 'match_competitors'), "match", "normal", "low");		
 		add_meta_box("results", "Results", array( $this, 'match_results'), "match", "normal", "low");
+		add_meta_box("championships", "Title Updates", array($this, 'match_titles'), "match", "normal", "low");
 		add_meta_box("referee", "Referee", array( $this, 'match_referee'), "match", "side", "low");
 		add_meta_box("rating", "Rating", array( $this, 'match_rating'), "match", "side", "low");
 		
@@ -105,6 +107,30 @@ class Wrestleefedmanager_Match {
 		add_meta_box("division", "Company/Division", array( $this, 'match_division'), "match", "side", "low");
 
 	}	
+	
+	function match_titles()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$belts = $custom["title"][0];
+		$result = $custom["titleupdate"][0];
+		?>
+		<table>
+		<tr><th>Title</th><th>Result</th></tr>
+		<tr><td> <?php
+			efed_select_from_entries('match_title', 'championship', $belts); ?>
+		</td><td>
+			<select name='match_title_result'>
+				<option>&nbsp;</option>
+				<option value="defense" <?php if ($result == "defense") echo 'selected' ?>>Successful Defense</option>
+				<option value="newchamp" <?php if ($result == "newchamp") echo 'selected' ?>>New Champion</option>
+				<option value="vacate" <?php if ($result == "vacate") echo 'selected' ?>>Vacated</option>
+			</select>
+		</td>
+		</tr>
+		</table>
+		<?php
+	}
 	
 	function match_weightclass()
 	{
@@ -148,9 +174,6 @@ class Wrestleefedmanager_Match {
 		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', 'workers', $victors, true);?></td></tr>
 		<tr><td><label>Time:</label></td><td><input name="match_time" type="text" size="150" value="<?php echo $time; ?>" /></td></tr>
 		<tr><td><label>Finish:</label></td><td><input name="match_finisher" type="text" size="150" value="<?php echo $finisher; ?>" /></td></tr></table>
-		<input type="radio" id="Non-Title" name="match_defensetype" value="Non-Title" <?php if ($titledefense != "Successful Defense" && $titledefense != "New Champion")echo "checked"; ?>><label for="Non-Title">Non-Title Match</label>
-		<input type="radio" id="Successful" name="match_defensetype" value="Successful Defense" <?php if ($titledefense == "Successful Defense")echo "checked"; ?>><label for="Successful">Successful Defense</label>
-		<input type="radio" id="NewChamp" name="match_defensetype" value="New Champion" <?php if ($titledefense == "New Champion")echo "checked"; ?>><label for="NewChamp">New Champion</label>		
 		<?php
 	}
 	

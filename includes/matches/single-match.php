@@ -37,25 +37,70 @@ get_header(); ?>
 					
 					<?php 
 					if (get_post_meta( get_the_ID(), 'victors', true ) != "" || get_post_meta( get_the_ID(), 'time', true ) != "" || 
-						get_post_meta( get_the_ID(), 'finisher', true ) != "" || get_post_meta( get_the_ID(), 'referee', true ) != "")
+						get_post_meta( get_the_ID(), 'finisher', true ) != "" || get_post_meta( get_the_ID(), 'referee', true ) != "" || 
+						get_post_meta (get_the_ID(), 'title', true) != "" )
 						{
 					?>
 					
 					<div id="clicktoshow"><button onclick="myFunction()">Results</button></div>
 					<div id="results" style="display:none; background: #e5e5e5;">
-					Results: 
+
 					<?php
-						echo get_post_meta( get_the_ID(), 'victors', true );
-						echo " in ";
-						echo get_post_meta( get_the_ID(), 'time', true );
-						echo " with ";
-						echo get_post_meta( get_the_ID(), 'finisher', true );
-						echo "<br />";
-						echo "Your referee for the match: ";
-						echo get_post_meta( get_the_ID(), 'referee', true );
-						echo "<br />";
-						echo get_post_meta( get_the_ID(), 'titledefense', true );
+
+						$victor = get_post_meta( get_the_ID(), 'victors');
+						$victorarray = array();
+						foreach ($victor[0] as $victorID)
+						{
+							$victorarray[] = get_the_title($victorID);
 						}
+
+						$victorcount = 0;
+						if (count($victorarray) > 0)
+						{
+							foreach($victorarray as $victorname)
+							{
+								$victorcount++;
+								if ($victorcount > 1)
+									echo ', ';
+								if ($victorcount > 1 && $victorcount == count($victorarray))
+									echo 'and ';
+								echo $victorname;										
+							}
+						}
+						
+						if (get_post_meta( get_the_ID(), 'time', true ) != "")
+						{
+							echo " in ";
+							echo get_post_meta( get_the_ID(), 'time', true );
+						}
+						if (get_post_meta( get_the_ID(), 'finisher', true ) != "")
+						{
+							echo " with ";
+							echo get_post_meta( get_the_ID(), 'finisher', true );
+						}
+						if (get_post_meta( get_the_ID(), 'referee', true ) != "")
+						{
+							echo "<br />";
+							echo "Your referee for the match: ";
+							echo get_post_meta( get_the_ID(), 'referee', true );
+						}
+												
+						if (get_post_meta (get_the_ID(), 'title', true) > 0 && get_post_meta(get_the_ID(), 'titleupdate', true) != "")
+						{
+							echo "<br />";
+							$res = get_post_meta(get_the_ID(), 'titleupdate', true);
+							
+							echo get_the_title(get_post_meta (get_the_ID(), 'title', true));
+							
+							if ($res == "vacate")
+								echo ' VACATED';
+							else if ($res == "defense")
+								echo ' successfully defended';
+							else 
+								echo ' -- NEW CHAMPION!';
+							
+						}
+					}
 					?>
 					</div>
 					

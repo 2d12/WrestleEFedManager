@@ -27,6 +27,8 @@ get_header(); ?>
 										$type = get_post_meta( get_the_ID(), 'type', true); 
 										if ($type == 'singles') echo 'Singles Title';
 										else if ($type == 'tag') echo 'Tag Team Title';
+										else if ($type == '6tag') echo '6-Man Tag Team Title';
+										else if ($type == '8tag') echo '8-Man Tag Team Title';
 									?>
 								</td></tr>
 								
