@@ -58,9 +58,9 @@ get_header(); ?>
 							if ($showfed) 
 							{
 								echo '<td>';
-								foreach($row['federation'] as $fedentry)
+								foreach($row['federation'][0] as $fedentry)
 									{
-										echo $fedentry . '<br />';
+										echo get_the_title($fedentry) . '<br />';
 									}
 								echo '</td>';
 							}

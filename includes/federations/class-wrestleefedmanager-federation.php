@@ -42,7 +42,7 @@ class Wrestleefedmanager_Federation {
         'description'         => __( 'Wrestling Companies' ),
         'labels'              => $fedlabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor', 'page-attributes', ),
+        'supports'            => array( 'title', 'editor', 'page-attributes', 'thumbnail', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
         //'taxonomies'          => array( 'genres' ),
         /* A hierarchical CPT is like Pages and can have

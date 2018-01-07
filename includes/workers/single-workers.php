@@ -34,6 +34,7 @@ get_header(); ?>
 						<!-- Display class data in right-aligned floating div -->
 												
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
+							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
 							<table>
 								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
 								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>

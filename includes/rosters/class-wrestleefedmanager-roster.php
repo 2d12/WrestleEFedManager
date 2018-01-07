@@ -89,16 +89,16 @@ class Wrestleefedmanager_Roster {
 		add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, 
 		              string $context = 'advanced', string $priority = 'default', array $callback_args = null )*/
 		add_meta_box("filters", "Filters", array( $this, 'roster_filters'), "roster", "normal", "low");
-		add_meta_box("data", "Data", array ($this, 'roster_data'), "roster", "normal", "low");
+		//add_meta_box("data", "Data", array ($this, 'roster_data'), "roster", "normal", "low");
 		}
 		
-		function roster_data()
+		/*function roster_data()
 		{
 			global $post;
 			$custom = get_post_custom($post->ID);
 			
 			print_r($custom);
-		}
+		}*/
 
     /**
      *

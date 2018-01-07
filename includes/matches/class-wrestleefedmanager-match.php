@@ -14,7 +14,40 @@ class Wrestleefedmanager_Match {
 		add_action( 'init',       		array( $this, 'create_match_page_type' ) ); 
 		add_action( 'save_post',  		array( $this, 'save_match') );		
 		add_filter ('template_include', array($this, 'display_match_template' ) );
+		add_filter( 'wp_get_nav_menu_items', array($this, 'match_locations_filter'), 10, 3 );
+
 	}
+	
+	
+	function match_locations_filter( $items, $menu, $args ) {
+	  $child_items = array(); 
+	  $menu_order = count($items); 
+	  $parent_item_id = 0;
+
+	  foreach ( $items as $item ) {
+		if ( in_array('locations-menu', $item->classes) ){ //add this class to your menu item
+			$parent_item_id = $item->ID;
+		}
+	  }
+
+	  if($parent_item_id > 0){
+
+		  foreach ( get_posts( 'post_type=matches&numberposts=-1' ) as $post ) {
+			$post->menu_item_parent = $parent_item_id;
+			$post->post_type = 'nav_menu_item';
+			$post->object = 'custom';
+			$post->type = 'custom';
+			$post->menu_order = ++$menu_order;
+			$post->title = $post->post_title;
+			$post->url = get_permalink( $post->ID );
+			array_push($child_items, $post);
+		  }
+
+	  }
+
+	  return array_merge( $items, $child_items );
+	}
+	
 	
 	function display_match_template ($template_path) {
 		if ( get_post_type() == 'match' ) {
@@ -172,8 +205,8 @@ class Wrestleefedmanager_Match {
 		?>
 		<table>
 		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', 'workers', $victors, true);?></td></tr>
-		<tr><td><label>Time:</label></td><td><input name="match_time" type="text" size="150" value="<?php echo $time; ?>" /></td></tr>
-		<tr><td><label>Finish:</label></td><td><input name="match_finisher" type="text" size="150" value="<?php echo $finisher; ?>" /></td></tr></table>
+		<tr><td><label>Time:</label></td><td><input name="match_time" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $time; ?>" /></td></tr>
+		<tr><td><label>Finish:</label></td><td><input name="match_finisher" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $finisher; ?>" /></td></tr></table>
 		<?php
 	}
 	

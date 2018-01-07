@@ -58,7 +58,7 @@ class Wrestleefedmanager_Championship {
         'description'         => __( 'championships' ),
         'labels'              => $championshiplabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor',),
+        'supports'            => array( 'title', 'editor', 'thumbnail',),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
         //'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
         /* A hierarchical CPT is like Pages and can have

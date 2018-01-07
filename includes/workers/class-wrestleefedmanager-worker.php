@@ -58,7 +58,7 @@ class Wrestleefedmanager_Worker {
         'description'         => __( 'Employees' ),
         'labels'              => $workerlabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor', ),
+        'supports'            => array( 'title', 'editor', 'thumbnail', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
         //'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
         /* A hierarchical CPT is like Pages and can have
@@ -92,7 +92,7 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("theme", "Theme Song", array( $this, 'worker_theme'), "workers", "normal", "low");
 		add_meta_box("signatures", "Signature and Finishing Moves", array( $this, 'worker_signature'), "workers", "normal", "low");
 		add_meta_box("associates", "Associates", array( $this, 'worker_associates'), "workers", "normal", "low");
-		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");
+		//add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");
 		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weightclass'), "workers", "side", "low");
 		add_meta_box("gender", "Gender", array( $this, 'worker_gender'), "workers", "side", "low");
 		add_meta_box("alignment", "Alignment", array( $this, 'worker_alignment'), "workers", "side", "low");
@@ -101,8 +101,9 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("birthday", "Birthday", array( $this, 'worker_birthday'), "workers", "side", "low");		
 		add_meta_box("height", "Height", array( $this, 'worker_height'), "workers", "side", "low");		
 		add_meta_box("weight", "Weight", array( $this, 'worker_weight'), "workers", "side", "low");		
-		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");		
-		}
+		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");	
+
+	}
 	
 	function worker_aka() {
 		global $post;
@@ -154,7 +155,7 @@ class Wrestleefedmanager_Worker {
 	{
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$div = $custom["division"][0];
+		$div = unserialize($custom["federation"][0]);
 		efed_select_from_entries('worker_division', 'feds', $div, true, true);
 	}
 	function worker_signature() {
@@ -225,7 +226,12 @@ class Wrestleefedmanager_Worker {
 		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
 		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
 		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
-		update_post_meta($post->ID, "federation", $_POST["worker_division"]);
+		
+		if ( ! add_post_meta( $post->ID, "federation", $_POST["worker_division"], true ) ) { 
+			update_post_meta( $post->ID, "federation", $_POST["worker_division"] );
+		}
+		
+		//update_post_meta($post->ID, "federation", $_POST["worker_division"]);
 		
 		//echo 'Saved weightclass as ' .  $_POST["worker_weightclass"];
 		//echo 'Saved weightclass as --' . get_post_meta( get_the_ID(), 'weightclass', true) . '--<br />';

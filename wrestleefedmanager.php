@@ -320,20 +320,6 @@ function efed_get_options($postType, $option_array, $selected, $hierarchy, $leve
 
 function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfilter, $alignfilter)
 {
-	/*
-		$team = $custom["team"][0];
-		$fed = unserialize($custom["federations"][0]);
-		$wc = unserialize($custom["weightclasses"][0]);
-		$gender = unserialize($custom["genders"][0]);
-		$align = unserialize($custom["alignments"][0]);
-		*/
-	
-					
-	/*echo 'TEAM: ' . $teamfilter . '<br />';
-	echo 'DIV: ' ;print_r($divfilter);
-	echo 'WT: ' ;print_r($weightfilter );
-	echo 'GENDR: ' ;print_r($genderfilter );
-	echo 'ALIGN: ' ;print_r($alignfilter );*/
 	
 	$args = array(
 			post_type => array(),
@@ -343,24 +329,23 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 			posts_per_page => -1,		
 			meta_query => array()			
 		);
-		
-	if ($teamfilter=="individual" || $team == "all")
+	if ($teamfilter=="individual" || $teamfilter == "" || $teamfilter == "all")
 	{
 		$args[post_type][] = 'workers';
 	}
-	if ($teamfilter=="team" || $team == "all")
+	if ($teamfilter=="team" || $teamfilter == "" || $teamfilter == "all")
 	{
 		$args[post_type][] = 'teams';
 	}
 	
-	if (count($divfilter[0]) > 0 )
+	/*if (count($divfilter[0]) > 0 )
 	{
 		$args[meta_query][] = array(
 			'key' => 'federation',
 			'value' => $divfilter[0],
 			'compare' => 'IN',
 		);
-	}
+	}*/
 	
 	if (count($weightfilter[0]) > 0 )
 	{
@@ -394,21 +379,50 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 		
 		foreach($lastposts as $thispost)
 		{
-			$retarr[] = array(
-				'title' => $thispost->post_title, 
-				'id' => $thispost->ID,//$thispost->get_post_meta($thispost->ID, 'abbr', true),
-				'federation' => get_post_meta($thispost->ID, 'federation'),
-				'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
-				'gender' => get_post_meta($thispost->ID, 'gender', true),
-				'alignment' => get_post_meta($thispost->ID, 'alignment', true),
-				);
+			if (count($divfilter[0] > 0))
+			{
+				$postfeds = get_post_meta($thispost->ID, 'federation');			
+				foreach ($postfeds[0] as $postfed)
+				{
+					foreach ($divfilter[0] as $filterfed)
+					{
+						if ($postfed == $filterfed)
+						{
+						$retarr[] = array(
+							'title' => $thispost->post_title, 
+							'id' => $thispost->ID,
+							'federation' => get_post_meta($thispost->ID, 'federation'),
+							'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+							'gender' => get_post_meta($thispost->ID, 'gender', true),
+							'alignment' => get_post_meta($thispost->ID, 'alignment', true),
+							);
+						break 2;
+						}
+					}
+				}
+			}
+			else
+			{
+				$retarr[] = array(
+					'title' => $thispost->post_title, 
+					'id' => $thispost->ID,
+					'federation' => get_post_meta($thispost->ID, 'federation', false),
+					'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+					'gender' => get_post_meta($thispost->ID, 'gender', true),
+					'alignment' => get_post_meta($thispost->ID, 'alignment', true),
+					);
+			}
 		}
+	//echo '<pre>';
+	//print_r($retarr);
+	//echo '</pre>';
+	
 	
 	return $retarr;
 	
 	//print_r($args);
 	//echo '<br />----------<br />';
-	//print_r($retarr);
+
 }
 
 function efed_get_all_federations()
