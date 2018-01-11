@@ -19,7 +19,74 @@ class Wrestleefedmanager_Match {
 	}
 	
 	
-	function match_locations_filter( $items, $menu, $args ) {
+	function match_locations_filter( $items, $menu, $args ) 
+	{
+	
+		//$menuLocation = 'MENU_NAME';// Registered menu location
+		$customPostType = 'match';// Custom post type name
+		$newRootMenuName = 'Shows';// Name that will appear in the menu
+
+		// Do not show the customized list in the admin pages
+		// and customize only the chosen menu
+		if (is_admin() ) //|| !($menu->slug === $menuLocation)) {
+		{
+			return $items;
+		}
+
+		$rootMenuItemId = PHP_INT_MAX;
+		$ordermin = count($items);
+
+		// Adding a new root level menu item
+		$items[] = (object)[
+		'ID'                => PHP_INT_MAX,
+		'title'             => $newRootMenuName,
+		'url'               => '#',
+		'menu_item_parent'  => 0,
+		'post_parent'       => 0,
+		'menu_order'        => ++$ordermin,
+		'db_id'             => $rootMenuItemId,
+
+		// These are not necessary for the functionality, but PHP warning will be thrown if not set
+		'type'              => 'custom',
+		'object'            => 'custom',
+		'object_id'         => '',
+		'classes'           => [],
+		];
+
+		// Querying custom posts
+		$customPosts = get_posts([
+		'post_type'        	=> $customPostType,
+		'posts_per_page'   	=> -1,
+		'order_by' 			=> 'menu_order',
+		'order' 			=> 'ASC',
+		]);
+
+		// Adding menu item specific properties to `$post` objects
+		foreach ($customPosts as $i => $post) {
+			$post->title = $post->post_title;
+			$post->url = get_permalink($post);
+			$post->menu_item_parent = ($post->post_parent ? $post->post_parent : $rootMenuItemId);
+			$post->menu_order = ++$ordermin;
+			$post->db_id = $post->ID;
+		}
+
+		/*echo '<!-- ITEMS --> ';
+		print_r($items);
+		echo '<!-- CUSTOMPOSTS -->';
+		print_r($customPosts) ;
+		echo '<!-- DONE -->';*/
+		
+		// Merge custom posts into menu items
+		$items = array_merge($items, $customPosts);
+		
+		/*echo '<!-- MERGED ARRAY -->' ;
+		print_r($items);
+		echo '<!-- MERGE DONE -->';*/
+
+		return $items;	
+		
+		
+		/*
 	  $child_items = array(); 
 	  $menu_order = count($items); 
 	  $parent_item_id = 0;
@@ -45,7 +112,7 @@ class Wrestleefedmanager_Match {
 
 	  }
 
-	  return array_merge( $items, $child_items );
+	  return array_merge( $items, $child_items );*/
 	}
 	
 	
