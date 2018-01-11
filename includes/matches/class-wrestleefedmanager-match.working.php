@@ -18,82 +18,20 @@ class Wrestleefedmanager_Match {
 
 	}
 	
-	function match_menu_children($parent_menu_ID, $parent_post_id, $ordermin)
-	{
-		$items = array();
-		
-		$childPosts = get_posts([
-			'post_type'        	=> 'match',
-			'posts_per_page'   	=> -1,
-			'order_by' 			=> 'menu_order',
-			'order' 			=> 'ASC',
-			'post_parent'		=> $parent_post_id,
-			]);
-		//print_r($childPosts);
-		
-		foreach ($childPosts as $item)
-		{		
-			$items[] = (object)[
-			'ID'                => $item->ID,
-			'title'             => $item->post_title,
-			'url'               => get_permalink($item),
-			'menu_item_parent'  => $parent_menu_ID,
-			'post_parent'       => $parentID,
-			'menu_order'        => ++$ordermin,
-			'db_id'             => $item->ID,
-			'type'              => 'custom',
-			'object'            => 'custom',
-			'object_id'         => '',
-			'classes'           => [],
-			];
-			
-			$newitems = $this->match_menu_children($item->ID, $item->ID, $ordermin);
-			//echo count($newitems) . '-';
-			if (count($newitems > 0))
-			{
-				$ordermin = $ordermin + count($newitems);
-				$items = array_merge($items, $newitems) ;		
-			}			
-		}		
-		//echo 'RUN <br />';
-		//print_r($items);
-		return $items;
-	}
 	
 	function match_locations_filter( $items, $menu, $args ) 
 	{
-	//print_r($items);
-		$customPostType = 'match';// Custom post type name		
-		$ordermin = count($items) + 1;
-		
-		$customPosts = get_posts([
-		'post_type'        	=> $customPostType,
-		'posts_per_page'   	=> -1,
-		'order_by' 			=> 'menu_order',
-		'order' 			=> 'ASC',
-		]);
+	
+		$ordermin = count($items);
 		
 		foreach ($items as $menuitem)
 		{
-			//if ($items->type_label != 'Match') continue;
-			//echo 'MATCH FOUND';
-			foreach ($customPosts as $match)
-			{
-				//echo '<br />';
-				//echo '<div style="color:white;">' . $menuitem->object_id . ' compared to ' . $match->ID . '</div>';
-				if ($menuitem->object_id == $match->ID)
-				{	
-					// This menu item IS a match entry.  Populate it with it's children.
-					$newitems = $this->match_menu_children($menuitem->db_id, $match->ID, $ordermin);
-					$ordermin = $ordermin + count($newitems);
-					$items = array_merge($items, $newitems) ;
-				}
-			}
+			
 		}
-		//print_r($items);
-		return $items;
-/*	
+
+	
 		//$menuLocation = 'MENU_NAME';// Registered menu location
+		$customPostType = 'match';// Custom post type name
 		$newRootMenuName = 'Shows';// Name that will appear in the menu
 
 		// Do not show the customized list in the admin pages
@@ -138,13 +76,22 @@ class Wrestleefedmanager_Match {
 			$post->menu_order = ++$ordermin;
 			$post->db_id = $post->ID;
 		}
+
+		/*echo '<!-- ITEMS --> ';
+		print_r($items);
+		echo '<!-- CUSTOMPOSTS -->';
+		print_r($customPosts) ;
+		echo '<!-- DONE -->';*/
 		
 		// Merge custom posts into menu items
 		$items = array_merge($items, $customPosts);
-	
+		
+		/*echo '<!-- MERGED ARRAY -->' ;
+		print_r($items);
+		echo '<!-- MERGE DONE -->';*/
 
 		return $items;	
-		*/
+		
 		
 		/*
 	  $child_items = array(); 
