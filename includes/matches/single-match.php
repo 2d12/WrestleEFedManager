@@ -23,6 +23,7 @@ get_header(); ?>
 					<?php 
 					wp_reset_postdata();
 					the_content();
+					//print_r(get_post_meta(get_the_ID()));
 					?>
 					<script>
 					function myFunction() {
@@ -60,8 +61,10 @@ get_header(); ?>
 							foreach($victorarray as $victorname)
 							{
 								$victorcount++;
-								if ($victorcount > 1)
+								if ($victorcount > 1 && count($victorarray) > 2)
 									echo ', ';
+								else if ($victorcount > 1)
+									echo ' ';
 								if ($victorcount > 1 && $victorcount == count($victorarray))
 									echo 'and ';
 								echo $victorname;										

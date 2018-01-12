@@ -110,10 +110,7 @@ function run_wrestleefedmanager() {
 			post_status => 'publish',
 			posts_per_page => -1,			
 		);
-		if (is_singular('match') ) {
-		//if ( is_page() && $post->post_parent )	
-		// wp_list_pages() 
-			//$lastposts = get_posts('sort_column=menu_order&title_li=&child_of=' . $post->post_parent . '&echo=0');			
+		if (is_singular('match') ) {		
 			$childpages = efed_list_posts( $args );
 			if ($childpages)
 			{
@@ -245,25 +242,8 @@ function efed_select_from_entries($varname, $postType, $selected, $multiple=fals
 			echo ' style="width:100%;box-sizing:border-box;">';
 			if (!$multiple) echo '<option value="">&nbsp;</option>';
 			efed_get_options($postType, $retarr, $selected, $use_hierarchy);
-			/*foreach ($retarr as $entry)
-			{
-				echo '<option value="' . $entry['id'] . '"';
-				if ($entry['id'] == $selected || (is_array($selected) && in_array($entry['id'], $selected)))
-				{
-					echo ' selected';
-				}
-				
-				echo '>';
-			    echo $entry['title'] . '</option>';
-				
-				if ($use_hierarchy)
-				{
-					
-				}
-			}*/
 			
 			echo '</select>';
-			//echo $SelectedValuesToOutput;
 		}
 		else
 		{
@@ -338,15 +318,6 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 		$args[post_type][] = 'teams';
 	}
 	
-	/*if (count($divfilter[0]) > 0 )
-	{
-		$args[meta_query][] = array(
-			'key' => 'federation',
-			'value' => $divfilter[0],
-			'compare' => 'IN',
-		);
-	}*/
-	
 	if (count($weightfilter[0]) > 0 )
 	{
 		$args[meta_query][] = array(
@@ -413,82 +384,29 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 					);
 			}
 		}
-	//echo '<pre>';
-	//print_r($retarr);
-	//echo '</pre>';
-	
-	
+
 	return $retarr;
-	
-	//print_r($args);
-	//echo '<br />----------<br />';
-
 }
 
-function efed_get_all_federations()
+function efed_worker_match_history($workerID)
 {
-		//wp_reset_postdata();
-		//global $post; 		 
-		$args = array(
-			post_type => 'feds',
-			order_by => 'title',
-			order => 'ASC',
+	$args = array(
+			post_type => 'match',
+			order_by => 'date',
+			order => 'DESC',
 			post_status => 'publish',
-			posts_per_page => -1,			
+			posts_per_page => -1,		
 		);
-		$lastposts = get_posts($args);
-		//return array(array('title'=>"Fake World Wrestling Entertainment",'abbr'=>"WWE"),
-		//			array('title'=>count($lastposts), 'abbr'=>"PWA"));
-		$retarr = array();
-		//echo 'POSTCOUNT:' . count($lastposts) . '<br />';
-		foreach($lastposts as $thispost)
+	$out = get_posts($args);
+	$rv = array();
+	foreach ($out as $match)
+	{	$competitors = get_post_meta($match->ID, 'competitors', false);
+		if (in_array($workerID, $competitors[0]))
 		{
-			//echo $thispost->title . " -- " ; //$thispost->get_post_meta($thispost->ID, 'abbr', true) . '<br />';
-			$retarr[] = array(
-				'title' => $thispost->post_title, 
-				'id' => $thispost->ID,//$thispost->get_post_meta($thispost->ID, 'abbr', true),
-				);
-				
-			$index++;
+			$rv[] = $match;
 		}
-		//echo 'FEDCOUNT:' . count($retarr) . '<br />';
-		//wp_reset_postdata();
-		return $retarr;
+	}
+	return $rv;
 }
-
-function efed_get_all_taxonomy_values($taxonomy)
-{
-/*	$args=array(
-		'public'   => true,
-		'_builtin' => false
-		);
-	$output = 'names';
-	$operator = 'and';
-	$taxonomies=get_taxonomies($args,$output,$operator); 
-	if  ($taxonomies) 
-	{
-		foreach ($taxonomies  as $tax ) 
-		{*/
-			$retarr = array();
-			$terms = get_terms([
-				'taxonomy' => $taxonomy,
-				'hide_empty' => false,
-				]);
-			
-			$terms = get_terms($tax);
-			foreach ( $terms as $term) 
-			{
-				$retarr[] = array(
-					'title' => $term->name,
-					'ID' => $term->name,
-					);
-			}
-			
-			return $retarr;
-		//}
-	//}
-}
-
-
 	
 run_wrestleefedmanager();

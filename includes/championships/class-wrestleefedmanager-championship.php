@@ -112,10 +112,10 @@ class Wrestleefedmanager_Championship {
 		<label for="championship_type">Type</label>
 		<select name='championship_type'>
 			<option <?php if ($type != "singles" && strpos($type, "tag") == false) echo 'selected'; ?>>&nbsp;</option>
-			<option value="singles" <?php if ($type="singles") echo 'selected';?>>Singles Title</option>
-			<option value="tag" <?php if ($type="tag") echo 'selected';?>>Tag Team Title</option>
-			<option value="6tag" <?php if ($type="6tag") echo 'selected';?>>6-Man Tag Team Title</option>
-			<option value="8tag" <?php if ($type="8tag") echo 'selected';?>>8-Man Tag Team Title</option>
+			<option value="singles" <?php if ($type=="singles") echo 'selected';?>>Singles Title</option>
+			<option value="tag" <?php if ($type=="tag") echo 'selected';?>>Tag Team Title</option>
+			<option value="6tag" <?php if ($type=="6tag") echo 'selected';?>>6-Man Tag Team Title</option>
+			<option value="8tag" <?php if ($type=="8tag") echo 'selected';?>>8-Man Tag Team Title</option>
 		</select>
 		<?php
 		

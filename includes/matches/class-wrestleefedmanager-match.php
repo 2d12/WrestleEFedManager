@@ -48,21 +48,17 @@ class Wrestleefedmanager_Match {
 			];
 			
 			$newitems = $this->match_menu_children($item->ID, $item->ID, $ordermin);
-			//echo count($newitems) . '-';
 			if (count($newitems > 0))
 			{
 				$ordermin = $ordermin + count($newitems);
 				$items = array_merge($items, $newitems) ;		
 			}			
 		}		
-		//echo 'RUN <br />';
-		//print_r($items);
 		return $items;
 	}
 	
 	function match_locations_filter( $items, $menu, $args ) 
 	{
-	//print_r($items);
 		$customPostType = 'match';// Custom post type name		
 		$ordermin = count($items) + 1;
 		
@@ -75,12 +71,8 @@ class Wrestleefedmanager_Match {
 		
 		foreach ($items as $menuitem)
 		{
-			//if ($items->type_label != 'Match') continue;
-			//echo 'MATCH FOUND';
 			foreach ($customPosts as $match)
 			{
-				//echo '<br />';
-				//echo '<div style="color:white;">' . $menuitem->object_id . ' compared to ' . $match->ID . '</div>';
 				if ($menuitem->object_id == $match->ID)
 				{	
 					// This menu item IS a match entry.  Populate it with it's children.
@@ -90,89 +82,7 @@ class Wrestleefedmanager_Match {
 				}
 			}
 		}
-		//print_r($items);
 		return $items;
-/*	
-		//$menuLocation = 'MENU_NAME';// Registered menu location
-		$newRootMenuName = 'Shows';// Name that will appear in the menu
-
-		// Do not show the customized list in the admin pages
-		// and customize only the chosen menu
-		if (is_admin() ) //|| !($menu->slug === $menuLocation)) {
-		{
-			return $items;
-		}
-
-		$rootMenuItemId = PHP_INT_MAX;
-		
-		// Adding a new root level menu item
-		$items[] = (object)[
-		'ID'                => PHP_INT_MAX,
-		'title'             => $newRootMenuName,
-		'url'               => '#',
-		'menu_item_parent'  => 0,
-		'post_parent'       => 0,
-		'menu_order'        => ++$ordermin,
-		'db_id'             => $rootMenuItemId,
-
-		// These are not necessary for the functionality, but PHP warning will be thrown if not set
-		'type'              => 'custom',
-		'object'            => 'custom',
-		'object_id'         => '',
-		'classes'           => [],
-		];
-
-		// Querying custom posts
-		$customPosts = get_posts([
-		'post_type'        	=> $customPostType,
-		'posts_per_page'   	=> -1,
-		'order_by' 			=> 'menu_order',
-		'order' 			=> 'ASC',
-		]);
-
-		// Adding menu item specific properties to `$post` objects
-		foreach ($customPosts as $i => $post) {
-			$post->title = $post->post_title;
-			$post->url = get_permalink($post);
-			$post->menu_item_parent = ($post->post_parent ? $post->post_parent : $rootMenuItemId);
-			$post->menu_order = ++$ordermin;
-			$post->db_id = $post->ID;
-		}
-		
-		// Merge custom posts into menu items
-		$items = array_merge($items, $customPosts);
-	
-
-		return $items;	
-		*/
-		
-		/*
-	  $child_items = array(); 
-	  $menu_order = count($items); 
-	  $parent_item_id = 0;
-
-	  foreach ( $items as $item ) {
-		if ( in_array('locations-menu', $item->classes) ){ //add this class to your menu item
-			$parent_item_id = $item->ID;
-		}
-	  }
-
-	  if($parent_item_id > 0){
-
-		  foreach ( get_posts( 'post_type=matches&numberposts=-1' ) as $post ) {
-			$post->menu_item_parent = $parent_item_id;
-			$post->post_type = 'nav_menu_item';
-			$post->object = 'custom';
-			$post->type = 'custom';
-			$post->menu_order = ++$menu_order;
-			$post->title = $post->post_title;
-			$post->url = get_permalink( $post->ID );
-			array_push($child_items, $post);
-		  }
-
-	  }
-
-	  return array_merge( $items, $child_items );*/
 	}
 	
 	
@@ -318,14 +228,14 @@ class Wrestleefedmanager_Match {
 	function match_competitors() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$competitors = $custom["competitors"][0];
+		$competitors = unserialize($custom["competitors"][0]);
 		efed_select_from_entries('match_competitors', 'workers', $competitors, true);
 	}
 	
 	function match_results() {
 		global $post;
 		$custom = get_post_custom($post->ID);
-		$victors = $custom["victors"][0];
+		$victors = unserialize($custom["victors"][0]);
 		$time = $custom["time"][0];
 		$finisher = $custom["finisher"][0];
 		$titledefense = $custom["titledefense"][0];
