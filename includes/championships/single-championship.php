@@ -20,6 +20,8 @@ get_header(); ?>
 						<!-- Display class data in right-aligned floating div -->
 												
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
+							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
+							
 							<div style="text-align:center;">Eligibility</div>
 							<table>
 								<tr><td>Type:</td><td>
@@ -109,12 +111,105 @@ get_header(); ?>
 							</table>
 						</div>	
 					</div>
-					
+				<script>
+				function toggleTitleHistory() {
+					var x = document.getElementById("titleHistory");
+					if (x.style.display === "none") {
+						x.style.display = "block";
+					} else {
+						x.style.display = "none";
+					}
+				}
+				</script>
 				<!-- Display contents -->
 				<div class="entry-content">
 					<?php 
 					wp_reset_postdata();
 					the_content(); 
+					?>
+					<div id="clickToShowTitleHistory"><button onclick="toggleTitleHistory()">Title History</button></div>
+					<div id="titleHistory" style="float: left; width: 63%; margin:0 0 10px 10px; padding: 5px 0;display:none; background: #e5e5e5;">
+					<?php
+					$titleHistory = efed_title_history(get_the_ID());
+					//echo '<pre>';
+					//print_r ($titleHistory);
+					//echo '</pre>';
+					if (count($titleHistory) > 0)
+					{						
+					?>
+					<table>
+					<tr>
+					<th>Champion</th>
+					<th>Date Won</th>
+					<th>Times Won</th>
+					<th>Reign Length</th>
+					<th>Number of Defenses</th>
+					<th>Total Days as Champion</th>
+					</tr>
+					
+					<?php
+					foreach ($titleHistory as $reign)
+					{
+						echo '<tr>';
+						echo '<td>';
+						foreach ($reign['champion'] as $champ)
+						{
+							$champarray[$champ] = get_the_title($champ);
+						}
+
+						$champcount = 0;
+						if (count($champarray) > 0)
+						{
+							foreach($champarray as $champid => $champname)
+							{
+								$champcount++;
+								if ($champcount > 1 && count($champarray) > 2)
+									echo ', ';
+								else if ($champcount > 1)
+									echo ' ';
+								if ($champcount > 1 && $champcount == count($champarray))
+									echo 'and ';
+								echo '<a href="';
+								echo get_permalink($champid);
+								echo '">' . $champname . '</a>';		
+								//echo $champname;								
+							}
+						}
+						else
+						{
+							echo "TITLE VACANT";
+						}
+						unset($champarray);
+						echo '</td>';
+						echo '<td>' . $reign['win'] . '</td>';
+						echo '<td>' . $reign['reignNum'] . '</td>';
+						echo '<td>' . $reign['length'] . ' Day';
+						if ($reign['length'] > 1) echo 's';
+						if ($reign['loss'] == null) echo '+';
+						echo '</td>';
+						echo '<td>' . $reign['defenses'] . '</td>';
+						if ($reign['total'] == "N/A")
+							echo '<td>' . $reign['total'] . '</td>';
+						else
+						{
+							echo '<td>' . $reign['total'] . ' Day';
+							if ($reign['total'] > 1) echo 's';
+							if ($reign['loss'] == null) echo '+';
+							echo '</td>';
+						}
+						echo '</tr>';
+					}
+					
+					?>
+					</table>
+					
+					<?php
+					echo '</div>';
+					}
+					else
+					{
+					echo 'No Championship History';	
+					}
 					?>
 				</div>
 			</div>

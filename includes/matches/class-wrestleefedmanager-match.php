@@ -238,7 +238,6 @@ class Wrestleefedmanager_Match {
 		$victors = unserialize($custom["victors"][0]);
 		$time = $custom["time"][0];
 		$finisher = $custom["finisher"][0];
-		$titledefense = $custom["titledefense"][0];
 		?>
 		<table>
 		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', 'workers', $victors, true);?></td></tr>

@@ -160,9 +160,9 @@ get_header(); ?>
 					if (count($matchHistory) > 0)
 					{						
 					?>
-					
-					<div id="clickToShowMatchHistory"><button onclick="toggleMatchHistory()">Match History</button></div>
-					<div id="matchHistory" style="float: left; width: 70%; margin:0 0 10px 10px; padding: 5px 0;display:none; background: #e5e5e5;">
+					<p />
+					<div id="clickToShowMatchHistory" style="margin:0 0 10px 10px;"><button onclick="toggleMatchHistory()">Match History</button></div>
+					<div id="matchHistory" style="width: 70%; margin:0 0 10px 10px; padding: 5px 0;display:none; background: #e5e5e5;">
 					<table>
 					<tr><th>Date</th><th>Match</th><th>Result</th></tr>
 					<?php
@@ -191,15 +191,100 @@ get_header(); ?>
 					?>
 					</table>					
 					</div>
-					
+
 					<?php 
 					}
+										
+					$titleHistory = efed_worker_title_history(get_the_ID()); 
+					if (count($titleHistory) > 0)
+					{
+						//echo '<pre>';
+						//print_r($titleHistory);
+						//echo '</pre>'
 					?>
-					<br />
-					<div id="clickToShowTitleHistory"><button onclick="toggleTitleHistory()">Title History</button></div>
-					<div id="titleHistory" style="display:none; background: #e5e5e5;">
-					Display Title History Here
+
+					<div id="clickToShowTitleHistory" style="margin:0 0 10px 10px;"><button onclick="toggleTitleHistory()">Title History</button></div>
+					<div id="titleHistory" style="width: 70%; margin:0 0 10px 10px; padding: 5px 0;display:none; background: #e5e5e5;">
+					<table>
+					<?php 
+
+					foreach ($titleHistory as $titleID => $title)
+					{
+						echo '<tr><td  colspan="4">' . get_the_title($titleID) . ' (' . $title['count'] . 'x; ' . 
+							$title['days'] . ' total days)</td></tr>';
+						foreach ($title['reigns'] as $reign)
+						{
+								
+							echo '<tr><td>' . $reign['win'] . '</td>';
+								
+							echo '<td>';
+							if (count($reign['prev']) > 0)
+							{
+								foreach($reign['prev'] as $champid)
+								{
+									$champcount++;
+									if ($champcount > 1 && count($reign['prev']) > 2)
+										echo ', ';
+									else if ($champcount > 1)
+										echo ' ';
+									if ($champcount > 1 && $champcount == count($reign['prev']))
+										echo 'and ';
+									echo '<a href="';
+									echo get_permalink($champid);
+									echo '">' . get_the_title($champid) . '</a>';		
+									//echo $champname;								
+								}
+							}
+							else
+							{
+								echo "TITLE VACANT";
+							}
+							echo '</td>';
+								
+							if ($reign['lost'] == null)
+							{
+								echo '<td colspan="2">REIGNING CHAMPION</td></tr>';
+							}
+							else
+							{
+								echo '<td>';
+								if (count($reign['next']) > 0)
+								{
+									foreach($reign['next'] as $champid)
+									{
+										$champcount++;
+										if ($champcount > 1 && count($reign['next']) > 2)
+											echo ', ';
+										else if ($champcount > 1)
+											echo ' ';
+										if ($champcount > 1 && $champcount == count($reign['next']))
+											echo 'and ';
+										echo '<a href="';
+										echo get_permalink($champid);
+										echo '">' . get_the_title($champid) . '</a>';		
+										//echo $champname;								
+									}
+								}
+								else
+								{
+									echo "TITLE VACANT";
+								}
+								echo '</td>';
+									
+								echo '<td>' . $reign['lost'] . '</td></tr>';	
+							}
+						}
+					}
+					//echo '<pre>';
+					//print_r($titleHistory);
+					//echo '</pre>';
+					
+					?>
+					</table>
 					</div>
+					<?php 					
+					}	
+					?>
 					
 				</div>
 			</div>

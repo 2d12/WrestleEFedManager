@@ -221,6 +221,9 @@ function efed_select_from_entries($varname, $postType, $selected, $multiple=fals
 		
 		$lastposts = get_posts($args);
 		$retarr = array();
+		$multisize = floor(count($lastposts) / 3);
+		$multisize = max(4,$multisize);
+		$multisize = min(12, $multisize);
 		foreach($lastposts as $thispost)
 		{
 			$retarr[] = array(
@@ -233,7 +236,7 @@ function efed_select_from_entries($varname, $postType, $selected, $multiple=fals
 			echo '<select name="' . $varname;
 			if ($multiple)
 			{
-				echo '[]" multiple';
+				echo '[]" multiple size="' . $multisize . '"';
 			}
 			else
 			{
@@ -408,5 +411,275 @@ function efed_worker_match_history($workerID)
 	}
 	return $rv;
 }
+
+function efed_worker_title_history($workerID)
+{
+		$args = array(
+		post_type => 'match',
+		order_by => 'date',
+		order => 'ASC',
+		post_status => 'publish',
+		posts_per_page => -1,		
+		);
+		
+		$args[meta_query][] = array(
+			'key' => 'titleupdate',
+			'value' => array ('newchamp', 'vacate'),
+			'compare' => 'IN',
+		);
+		
+		$titleChanges = get_posts($args);
+		
+		$champList = array(0=>'');
+		$lastChamp = array();
+		$workerHistory = array();
+		
+		foreach ($titleChanges as $change)
+		{
+			$victor = get_post_meta($change->ID, 'victors')[0];
+			//echo '<pre>VICTOR LIST:';
+			//print_r($victor);
+			//echo '</pre>';
+			//echo 'Is ' . $workerID . " in array?  ";
+			$workerIsVictor = in_array($workerID, $victor);
+			//echo $workerIsVictor?"YES<br />":"NO<br />";
+			$victorNum = array_search($victor, $champList);
+			if ($victorNum == false)
+			{
+				$victorNum = count($champList);
+				$champList[$victorNum] = $victor;
+			}
+			
+			$defenseType = get_post_meta($change->ID, 'titleupdate', true);
+			$title = get_post_meta($change->ID, 'title', true);
+			
+			if ($defenseType == 'newchamp')
+			{
+				//echo 'NEW CHAMP...Was it ME?<br />';
+				// Did this worker win here?
+				if ($workerIsVictor)
+				{
+					//echo 'YES IT WAS!<br />';
+					if (array_key_exists($title, $workerHistory) == false)
+					{
+						$workerHistory[$title] = array();
+					}
+					if (array_key_exists('reigns', $workerHistory[$title] == false))
+					{
+						$workerHistory[$title]['reigns'] = array();
+					}
+					
+					$workerHistory[$title]['reigns'][] = array(
+						'win' => get_the_date( 'Y-m-d', $change->ID ),
+						'prev' => $champList[$lastChamp[$title]],
+						'next' => null,
+						'lost' => null,
+					);
+					
+					if (array_key_exists('count', $workerHistory[$title]))
+					{
+						$workerHistory[$title]['count'] = $workerHistory[$title]['count'] + 1;
+					}
+					else
+					{
+						$workerHistory[$title]['count'] = 1;							
+					}
+				}
+				// Did this worker LOSE here?				
+				else if (in_array($workerID, $champList[$lastChamp[$title]]))
+				{
+					//echo 'NO, DUMBASS, I LOST IT HERE!<br />';
+					$reignNum = $workerHistory[$title]['count'];
+					$workerHistory[$title]['reigns'][$reignNum - 1]['next'] = $victor;
+					$workerHistory[$title]['reigns'][$reignNum - 1]['lost'] = get_the_date( 'Y-m-d', $change->ID );
+					if (array_key_exists('days', $workerHistory[$title]) == false)
+					{
+						//echo 'Setting total reign days to 0';
+						$workerHistory[$title]['days'] = 0;
+					}
+					$rstart = strtotime($workerHistory[$title]['reigns'][$reignNum - 1]['win']);
+					$rend = strtotime($workerHistory[$title]['reigns'][$reignNum - 1]['lost']);
+					$rdiff = floor(($rend - $rstart)/(60 * 60 * 24));
+					//echo 'Setting total reign days to ' . ($workerHistory[$title]['days'] + $rdiff);
+					$workerHistory[$title]['days'] = $workerHistory[$title]['days'] + $rdiff;
+				}				
+
+				// else this worker wasn't involved - do nothing.
+				
+				$lastChamp[$title] = $victorNum;
+			}
+			else if ($defenseType == 'vacate')
+			{
+				//echo 'Title was vacated...<br />';
+				if (in_array($workerID, $champList[$lastChamp[$title]]))
+				{
+					$reignNum = $workerHistory[$title]['count'];
+					$workerHistory[$title]['reigns'][$reignNum - 1]['next'] = -1;
+					$workerHistory[$title]['reigns'][$reignNum - 1]['lost'] = get_the_date( 'Y-m-d', $change->ID );
+					if (array_key_exists('days', $workerHistory[$title]) == false)
+					{
+						//echo 'Setting total reign days to 0';
+						$workerHistory[$title]['days'] = 0;
+					}
+					$rstart = strtotime($workerHistory[$title]['reigns'][$reignNum - 1]['win']);
+					$rend = strtotime($workerHistory[$title]['reigns'][$reignNum - 1]['lost']);
+					$rdiff = floor(($rend - $rstart)/(60 * 60 * 24));
+					//echo 'Setting total reign days to ' . ($workerHistory[$title]['days'] + $rdiff);
+					$workerHistory[$title]['days'] = $workerHistory[$title]['days'] + $rdiff;
+				}
+				
+				$lastChamp[$title] = -1;
+			}
+		}
+		
+		//echo '<pre>';
+		//print_r($workerHistory);
+		//echo '</pre>';
+		foreach ($workerHistory as $key => $titleHistory)
+		{
+			$reignCount = $titleHistory['count'];
+			if ($titleHistory['reigns'][$reignCount -1]['lost'] == null)
+			{
+				//echo 'COUNTING DAYS AS REIGNING CHAMPION<br />';
+				if (array_key_exists('days', $titleHistory) == false)
+					{
+						//echo 'Setting total reign days to 0';
+						$titleHistory['days'] = 0;
+					}
+					$rstart = strtotime($titleHistory['reigns'][$reignCount - 1]['win']);
+					$rend = time();
+					$rdiff = floor(($rend - $rstart)/(60 * 60 * 24));
+					//echo 'Setting total reign days to ' . ($workerHistory[$title]['days'] + $rdiff);
+					$titleHistory['days'] = $titleHistory['days'] + $rdiff;
+			}
+		$workerHistory[$key] = $titleHistory;
+		}
+		//echo '<pre>';
+		//print_r($workerHistory);
+		//echo '</pre>';
+		return $workerHistory;
+}
+
+function efed_title_history($titleID)
+{
+	$args = array(
+		post_type => 'match',
+		order_by => 'date',
+		order => 'ASC',
+		post_status => 'publish',
+		posts_per_page => -1,		
+		meta_query => array(),
+		);
+	$args[meta_query][] = array(
+			'key' => 'title',
+			'value' => $titleID,
+		);
+	
+	$out = get_posts($args);
+	$reigns = array();
+	$reignCount = array();
+	$champList = array(0=>''); // Get rid of false failures in array_search
+	
+	$lastID = -1;
+	foreach ($out as $titleMatch)
+	{
+		$defenseType = get_post_meta($titleMatch->ID, 'titleupdate', true);
+		$victor = get_post_meta($titleMatch->ID, 'victors')[0];
+		if ($defenseType == "newchamp" )
+		{
+			$victorNum = array_search($victor, $champList);
+			if ($victorNum == false)
+			{
+				$victorNum = count($champList);
+				$champList[$victorNum] = $victor;
+			}
+			
+			if ($lastID >= 0)
+			{
+				$loserNum = array_search($reigns[$lastID]['champion'], $champList);
+			
+				$reigns[$lastID]['loss'] = get_the_date( 'Y-m-d', $titleMatch->ID );
+				$rend = strtotime(get_the_date( 'Y-m-d', $titleMatch->ID ));
+				$rstart = strtotime($reigns[$lastID]['win']);
+				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
+				$reigns[$lastID]['length'] = $rdiff;
+				if (array_key_exists($loserNum, $reignCount))
+				{	
+					$reignCount[$loserNum]['days'] = $reignCount[$loserNum]['days'] + $rdiff;
+				}
+				else
+				{
+					$reignCount[$loserNum]['days'] = $rdiff;
+				}
+				if ($reigns[$lastID]['champion'] != "Title Vacant")
+					$reigns[$lastID]['total'] = $reignCount[$loserNum]['days'];
+			}
+			
+			if (array_key_exists($victorNum, $reignCount))
+			{
+				$reignCount[$victorNum]['count'] = $reignCount[$victorNum]['count'] + 1;
+			}
+			else
+			{
+				$reignCount[$victorNum]['count'] = 1;
+			}
+			
+			$reigns[++$lastID] = array(
+				'champion' => $victor,
+				'win' => get_the_date( 'Y-m-d', $titleMatch->ID ),
+				'reignNum' => $reignCount[$victorNum]['count'],
+				'defenses' => 0,
+				'loss' => null,
+			);
+		}
+		else if ($defenseType == "defense" )
+		{
+			$reigns[$lastID]['defenses'] = $reigns[$lastID]['defenses'] + 1;
+		}
+		else // VACATED
+		{
+			$victorNum = array_search($victor, $champList);
+			
+			if ($lastID >= 0)
+			{
+				$reigns[$lastID]['loss'] = get_the_date( 'Y-m-d', $titleMatch->ID );
+
+				$rend = strtotime(get_the_date( 'Y-m-d', $titleMatch->ID ));
+				$rstart = strtotime($reigns[$lastID]['win']);
+				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
+				$reigns[$lastID]['length'] = $rdiff;
+				$reignCount[$victorNum]['days'] = $reignCount[$victorNum]['days'] + $rdiff;
+				$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
+			}
+			
+			$reigns[++$lastID] = array(
+				'champion' => "Title Vacant",
+				'win' => get_the_date( 'Y-m-d', $titleMatch->ID ),
+				'reignNum' => "N/A",
+				'defenses' => "N/A",
+				'loss' => null,
+				'total' => "N/A",
+				);
+			
+		}
+		
+	}
+	
+	$rend = time();
+	$rstart = strtotime($reigns[$lastID]['win']);
+	$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
+	$reigns[$lastID]['length'] = $rdiff;
+	$reignCount[$victorNum]['days'] += $rdiff;
+	if ($reigns[$lastID]['champion'] != "Title Vacant")
+		$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
+	
+	//print_r($reignCount);
+/* 	echo '<pre>';
+	print_r ($reigns);
+	echo '</pre>'; */
+	
+	return $reigns;	
+}
+
 	
 run_wrestleefedmanager();
