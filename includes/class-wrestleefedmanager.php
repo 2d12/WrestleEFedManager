@@ -75,6 +75,7 @@ class Wrestleefedmanager {
 	protected $event_type;
 	protected $match_type;
 	protected $roster_type;
+	protected $team_type;
 	
 	/**
 	 * Define the core functionality of the plugin.
@@ -153,7 +154,11 @@ class Wrestleefedmanager {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
 		$this->worker_type = new Wrestleefedmanager_Worker();
 		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/matches/class-wrestleefedmanager-match.php';		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/teams/class-wrestleefedmanager-teams.php';		
+		$this->team_type = new Wrestleefedmanager_Team();
+
+		require_once plugin_dir_path( dirname( 
+		__FILE__ ) ) . 'includes/matches/class-wrestleefedmanager-match.php';		
 		$this->match_type = new Wrestleefedmanager_Match();
 		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/alignments/class-wrestleefedmanager-alignment.php';		

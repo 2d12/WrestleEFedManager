@@ -230,7 +230,7 @@ class Wrestleefedmanager_Match {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$competitors = unserialize($custom["competitors"][0]);
-		efed_select_from_entries('match_competitors', 'workers', $competitors, true);
+		efed_select_from_entries('match_competitors', array('workers', 'teams'), $competitors, true);
 	}
 	
 	function match_results() {
@@ -241,7 +241,7 @@ class Wrestleefedmanager_Match {
 		$finisher = $custom["finisher"][0];
 		?>
 		<table>
-		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', 'workers', $victors, true);?></td></tr>
+		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', array('workers', 'teams'), $victors, true);?></td></tr>
 		<tr><td><label>Time:</label></td><td><input name="match_time" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $time; ?>" /></td></tr>
 		<tr><td><label>Finish:</label></td><td><input name="match_finisher" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $finisher; ?>" /></td></tr></table>
 		<?php
