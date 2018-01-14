@@ -146,6 +146,7 @@ class Wrestleefedmanager_Match {
         'publicly_queryable'  => true,
         'capability_type'     => 'page',
 		'register_meta_box_cb' => array( $this, 'initialize_match_page_type'),
+		'menu_icon'   		   => 'dashicons-desktop',
     );
 	 
 		register_post_type( 'match', $matchargs);

@@ -78,6 +78,7 @@ class Wrestleefedmanager_Roster {
         'publicly_queryable'  => true,
         'capability_type'     => 'page',
 		'register_meta_box_cb' => array( $this, 'initialize_roster_post_type'),
+		'menu_icon'   		   => 'dashicons-id',
     );
 	 
 		register_post_type( 'roster', $rosterargs);
