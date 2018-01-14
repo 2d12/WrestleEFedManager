@@ -2,9 +2,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Wrestleefedmanager_Roster' ) ) :
+if ( ! class_exists( 'efedmanager_Roster' ) ) :
 
-class Wrestleefedmanager_Roster {
+class efedmanager_Roster {
 	
 	/**
      * Constructor
@@ -71,7 +71,7 @@ class Wrestleefedmanager_Roster {
         'show_in_menu'        => true,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
-        'menu_position'       => 17,
+        'menu_position'       => 29,
         'can_export'          => true,
         'has_archive'         => true,
         'exclude_from_search' => false,

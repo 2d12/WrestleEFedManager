@@ -9,8 +9,8 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  * @author     E. Steev Ramsdell <steev@2d12.com>
  */
-class Wrestleefedmanager_i18n {
+class efedmanager_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Wrestleefedmanager_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'wrestleefedmanager',
+			'efedmanager',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

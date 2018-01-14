@@ -2,9 +2,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Wrestleefedmanager_Federation' ) ) :
+if ( ! class_exists( 'efedmanager_Federation' ) ) :
 
-class Wrestleefedmanager_Federation {
+class efedmanager_Federation {
 	
 	/**
      * Constructor
@@ -55,7 +55,7 @@ class Wrestleefedmanager_Federation {
         'show_in_menu'        => true,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
-        'menu_position'       => 17,
+        'menu_position'       => 26,
         'can_export'          => true,
         'has_archive'         => true,
         'exclude_from_search' => false,

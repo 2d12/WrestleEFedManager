@@ -10,19 +10,19 @@
  *
  * @link              https://github.com/2d12/WrestleEFedManager
  * @since             1.0.0
- * @package           Wrestleefedmanager
+ * @package           EFedmanager
  *
  * @wordpress-plugin
- * Plugin Name:       WrestleEFed Manager
+ * Plugin Name:       eEFed Manager
  * Plugin URI:        https://github.com/2d12/WrestleEFedManager
- * Description:       Establishes a usable history for a wrestling e-fed, including the ability to store multiple federations,
+ * Description:       Establishes a usable history for a wrestling or MMA e-fed, including the ability to store multiple federations,
  *                    workers, titles (with histories), events, and match history.
  * Version:           1.0.0
  * Author:            E. Steev Ramsdell
  * Author URI:        http://www.2d12.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wrestleefedmanager
+ * Text Domain:       efedmanager
  * Domain Path:       /languages
  */
 
@@ -35,30 +35,30 @@ define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-wrestleefedmanager-activator.php
+ * This action is documented in includes/class-efedmanager-activator.php
  */
-function activate_wrestleefedmanager() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wrestleefedmanager-activator.php';
-	Wrestleefedmanager_Activator::activate();
+function activate_efedmanager() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-efedmanager-activator.php';
+	efedmanager_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wrestleefedmanager-deactivator.php
+ * This action is documented in includes/class-efedmanager-deactivator.php
  */
-function deactivate_wrestleefedmanager() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wrestleefedmanager-deactivator.php';
-	Wrestleefedmanager_Deactivator::deactivate();
+function deactivate_efedmanager() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-efedmanager-deactivator.php';
+	efedmanager_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_wrestleefedmanager' );
-register_deactivation_hook( __FILE__, 'deactivate_wrestleefedmanager' );
+register_activation_hook( __FILE__, 'activate_efedmanager' );
+register_deactivation_hook( __FILE__, 'deactivate_efedmanager' );
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wrestleefedmanager.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-efedmanager.php';
 
 /**
  * Begins execution of the plugin.
@@ -69,9 +69,9 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wrestleefedmanager.php';
  *
  * @since    1.0.0
  */
-function run_wrestleefedmanager() {
+function run_efedmanager() {
 
-	$plugin = new Wrestleefedmanager();
+	$plugin = new efedmanager();
 	$plugin->run();
 }
 
@@ -770,4 +770,4 @@ function efed_title_history($titleID)
 }
 
 	
-run_wrestleefedmanager();
+run_efedmanager();

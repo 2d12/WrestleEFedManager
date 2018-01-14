@@ -6,8 +6,8 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  * @author     E. Steev Ramsdell <steev@2d12.com>
  */
-class Wrestleefedmanager_Activator {
+class efedmanager_Activator {
 
 	/**
 	 * Short Description. (use period)

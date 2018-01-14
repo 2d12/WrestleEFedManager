@@ -2,9 +2,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Wrestleefedmanager_Match' ) ) :
+if ( ! class_exists( 'efedmanager_Match' ) ) :
 
-class Wrestleefedmanager_Match {
+class efedmanager_Match {
 	
 	/**
      * Constructor
@@ -139,7 +139,7 @@ class Wrestleefedmanager_Match {
         'show_in_menu'        => true,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
-        'menu_position'       => 19,
+        'menu_position'       => 30,
         'can_export'          => true,
         'has_archive'         => true,
         'exclude_from_search' => false,

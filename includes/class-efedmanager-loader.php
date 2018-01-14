@@ -6,8 +6,8 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  * @author     E. Steev Ramsdell <steev@2d12.com>
  */
-class Wrestleefedmanager_Loader {
+class efedmanager_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

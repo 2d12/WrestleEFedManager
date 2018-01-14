@@ -6,8 +6,8 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/admin
+ * @package    efedmanager
+ * @subpackage efedmanager/admin
  */
 
 /**
@@ -16,11 +16,11 @@
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/admin
+ * @package    efedmanager
+ * @subpackage efedmanager/admin
  * @author     E. Steev Ramsdell <steev@2d12.com>
  */
-class Wrestleefedmanager_Admin {
+class efedmanager_Admin {
 
 	/**
 	 * The ID of this plugin.
@@ -65,15 +65,15 @@ class Wrestleefedmanager_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Wrestleefedmanager_Loader as all of the hooks are defined
+		 * defined in efedmanager_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Wrestleefedmanager_Loader will then create the relationship
+		 * The efedmanager_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wrestleefedmanager-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/efedmanager-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -88,15 +88,15 @@ class Wrestleefedmanager_Admin {
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Wrestleefedmanager_Loader as all of the hooks are defined
+		 * defined in efedmanager_Loader as all of the hooks are defined
 		 * in that particular class.
 		 *
-		 * The Wrestleefedmanager_Loader will then create the relationship
+		 * The efedmanager_Loader will then create the relationship
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wrestleefedmanager-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/efedmanager-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 	
@@ -144,7 +144,7 @@ class Wrestleefedmanager_Admin {
 	 */
 
 	public function display_plugin_setup_page() {
-		include_once( 'partials/wrestleefedmanager-admin-display.php' );
+		include_once( 'partials/efedmanager-admin-display.php' );
 	}
 	
 }

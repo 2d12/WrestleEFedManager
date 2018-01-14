@@ -8,8 +8,8 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/admin/partials
+ * @package    efedmanager
+ * @subpackage efedmanager/admin/partials
  */
 ?>
 
