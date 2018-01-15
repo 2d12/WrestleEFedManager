@@ -58,22 +58,26 @@ get_header(); ?>
 							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
 							<table>
 								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
-								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>
+								<tr><td>Members:</td><td>
+								<?php
+									$comp = get_post_meta(get_the_ID(), 'team_competitors', true);
+									$assc = get_post_meta(get_the_ID(), 'associates', true);
+									if (count($comp) > 0 && count($assc) > 0)
+										$teamListID = array_merge($comp, $assc);
+									else if (count ($comp) > 0)
+										$teamListID = $comp;
+									else
+										$teamListID = $assc;
+									$teamListName = array();
+									foreach ($teamListID as $teamMember)
+									{
+										echo '<a href="';
+										echo get_permalink($teamMember);
+										echo '">' . get_the_title($teamMember) . '</a><br />';	
+									}
 
-								<tr><td>Gender:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'gender', true )); ?></td></tr>
-								<?php if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
-									?>
-									<tr><td>Height:</td><td><?php echo get_post_meta( get_the_ID(), 'height', true ); ?></td></tr>
-								<?php }
-								if (strlen(get_post_meta( get_the_ID(), 'weight', true )) > 0) {
-									?>
-									<tr><td>Weight:</td><td><?php echo get_post_meta( get_the_ID(), 'weight', true ); ?></td></tr>
-								<?php }
-								if (strlen(get_post_meta( get_the_ID(), 'birth', true )) > 0) {
-									?>
-									<tr><td>Birthday:</td><td><?php echo get_post_meta( get_the_ID(), 'birth', true ); ?></td></tr>
-								<?php }
-								 ?>
+								?>
+								</td></tr>
 							</table>
 						</div>
 						
@@ -205,26 +209,7 @@ get_header(); ?>
 						foreach ($title['reigns'] as $reign)
 						{
 								
-							echo '<tr><td>' . $reign['win'] ;
-							if (count($reign['cowinner']) > 0)
-							{
-								echo '<br />With ';
-								foreach($reign['cowinner'] as $cowin)
-								{
-									$cochampcount++;
-									if ($cochampcount > 1 && count($reign['cowinner']) > 2)
-										echo ', ';
-									else if ($cochampcount > 1)
-										echo ' ';
-									if ($cochampcount > 1 && $cochampcount == count($reign['cowinner']))
-										echo 'and ';
-									echo '<a href="';
-									echo get_permalink($cowin);
-									echo '">' . get_the_title($cowin) . '</a>';		
-									//echo $champname;								
-								}
-							}							
-							echo '</td>';
+							echo '<tr><td>' . $reign['win'] . '</td>';
 								
 							echo '<td>';
 							if (count($reign['prev']) > 0)

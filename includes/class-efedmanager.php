@@ -9,10 +9,11 @@
  * @link       http://www.2d12.com
  * @since      1.0.0
  *
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  */
 
+ 
 /**
  * The core plugin class.
  *
@@ -23,11 +24,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Wrestleefedmanager
- * @subpackage Wrestleefedmanager/includes
+ * @package    efedmanager
+ * @subpackage efedmanager/includes
  * @author     E. Steev Ramsdell <steev@2d12.com>
  */
-class Wrestleefedmanager {
+class efedmanager {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +36,7 @@ class Wrestleefedmanager {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Wrestleefedmanager_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      efedmanager_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -62,18 +63,20 @@ class Wrestleefedmanager {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Wrestleefedmanager_Federation   $federation_type    Used just for constructor.
+	 * @var      efedmanager_Federation   $federation_type    Used just for constructor.
 	 */
 	protected $federation_type;
 	
 	protected $worker_type;
 	protected $weightclass_type;
-	protected $division_type;
 	protected $alignment_type;
 	protected $gender_type;
 	protected $title_type;
 	protected $event_type;
-
+	protected $match_type;
+	protected $roster_type;
+	protected $team_type;
+	
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -89,7 +92,7 @@ class Wrestleefedmanager {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'wrestleefedmanager';
+		$this->plugin_name = 'efedmanager';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -103,10 +106,10 @@ class Wrestleefedmanager {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Wrestleefedmanager_Loader. Orchestrates the hooks of the plugin.
-	 * - Wrestleefedmanager_i18n. Defines internationalization functionality.
-	 * - Wrestleefedmanager_Admin. Defines all hooks for the admin area.
-	 * - Wrestleefedmanager_Public. Defines all hooks for the public side of the site.
+	 * - efedmanager_Loader. Orchestrates the hooks of the plugin.
+	 * - efedmanager_i18n. Defines internationalization functionality.
+	 * - efedmanager_Admin. Defines all hooks for the admin area.
+	 * - efedmanager_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -121,61 +124,64 @@ class Wrestleefedmanager {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wrestleefedmanager-loader.php';
-		$this->loader = new Wrestleefedmanager_Loader();		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-efedmanager-loader.php';
+		$this->loader = new efedmanager_Loader();		
 	
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wrestleefedmanager-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-efedmanager-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wrestleefedmanager-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-efedmanager-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wrestleefedmanager-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-efedmanager-public.php';
 		
 		/**
 		 * The classes responsible for defining the various post types.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_weight-class/class-wrestleefedmanager-weightclass.php';		
-		$this->weightclass_type = new Wrestleefedmanager_WeightClass();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_divisions/class-wrestleefedmanager-divisions.php';		
-		$this->division_type = new Wrestleefedmanager_division();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_events/class-wrestleefedmanager-events.php';		
-		$this->event_type = new Wrestleefedmanager_event();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_gender/class-wrestleefedmanager-genders.php';		
-		$this->gender_type = new Wrestleefedmanager_gender();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_alignment/class-wrestleefedmanager-alignments.php';		
-		$this->alignment_type = new Wrestleefedmanager_alignment();
-		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/taxonomy_titles/class-wrestleefedmanager-titles.php';		
-		$this->title_type = new Wrestleefedmanager_Title();
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-wrestleefedmanager-federation.php';		
-		$this->federation_type = new Wrestleefedmanager_Federation();
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/federations/class-efedmanager-federation.php';		
+		$this->federation_type = new efedmanager_Federation();
 		
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-wrestleefedmanager-worker.php';		
-		$this->worker_type = new Wrestleefedmanager_Worker();
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/workers/class-efedmanager-worker.php';		
+		$this->worker_type = new efedmanager_Worker();
 		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/teams/class-efedmanager-teams.php';		
+		$this->team_type = new efedmanager_Team();
 
+		require_once plugin_dir_path( dirname( 
+		__FILE__ ) ) . 'includes/matches/class-efedmanager-match.php';		
+		$this->match_type = new efedmanager_Match();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/alignments/class-efedmanager-alignment.php';		
+		$this->alignment_type = new efedmanager_Alignment();
+				
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/genders/class-efedmanager-gender.php';		
+		$this->gender_type = new efedmanager_Gender();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/weightclasses/class-efedmanager-weightclass.php';		
+		$this->weightclass_type = new efedmanager_WeightClass();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/rosters/class-efedmanager-roster.php';		
+		$this->roster_type = new efedmanager_Roster();
+		
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/championships/class-efedmanager-championship.php';		
+		$this->title_type = new efedmanager_Championship();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wrestleefedmanager_i18n class in order to set the domain and to register the hook
+	 * Uses the efedmanager_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -183,7 +189,7 @@ class Wrestleefedmanager {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wrestleefedmanager_i18n();
+		$plugin_i18n = new efedmanager_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -198,7 +204,7 @@ class Wrestleefedmanager {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Wrestleefedmanager_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new efedmanager_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -221,7 +227,7 @@ class Wrestleefedmanager {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Wrestleefedmanager_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new efedmanager_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -252,7 +258,7 @@ class Wrestleefedmanager {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Wrestleefedmanager_Loader    Orchestrates the hooks of the plugin.
+	 * @return    efedmanager_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
@@ -268,4 +274,5 @@ class Wrestleefedmanager {
 		return $this->version;
 	}
 
+	
 }

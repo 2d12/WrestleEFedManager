@@ -2,9 +2,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Wrestleefedmanager_Worker' ) ) :
+if ( ! class_exists( 'efedmanager_Worker' ) ) :
 
-class Wrestleefedmanager_Worker {
+class efedmanager_Worker {
 	
 	/**
      * Constructor
@@ -58,9 +58,9 @@ class Wrestleefedmanager_Worker {
         'description'         => __( 'Employees' ),
         'labels'              => $workerlabels,
         // Features this CPT supports in Post Editor
-        'supports'            => array( 'title', 'editor', ),
+        'supports'            => array( 'title', 'editor', 'thumbnail', ),
         // You can associate this CPT with a taxonomy or custom taxonomy. 
-        'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
+        //'taxonomies'          => array( 'weightclass', 'division', 'gender', 'alignment' ),
         /* A hierarchical CPT is like Pages and can have
         * Parent and child items. A non-hierarchical CPT
         * is like Posts.
@@ -71,13 +71,14 @@ class Wrestleefedmanager_Worker {
         'show_in_menu'        => true,
         'show_in_nav_menus'   => true,
         'show_in_admin_bar'   => true,
-        'menu_position'       => 18,
+        'menu_position'       => 27,
         'can_export'          => true,
         'has_archive'         => true,
         'exclude_from_search' => false,
         'publicly_queryable'  => true,
         'capability_type'     => 'page',
 		'register_meta_box_cb' => array( $this, 'initialize_worker_post_type'),
+		'menu_icon'   		   => 'dashicons-businessman',
     );
 	 
 		register_post_type( 'workers', $workerargs);
@@ -92,19 +93,25 @@ class Wrestleefedmanager_Worker {
 		add_meta_box("theme", "Theme Song", array( $this, 'worker_theme'), "workers", "normal", "low");
 		add_meta_box("signatures", "Signature and Finishing Moves", array( $this, 'worker_signature'), "workers", "normal", "low");
 		add_meta_box("associates", "Associates", array( $this, 'worker_associates'), "workers", "normal", "low");
-		add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");		
+		//add_meta_box("portrait", "Portrait", array( $this, 'worker_portrait'), "workers", "side", "low");
+		add_meta_box("weightclass", "Weight Class", array( $this, 'worker_weightclass'), "workers", "side", "low");
+		add_meta_box("gender", "Gender", array( $this, 'worker_gender'), "workers", "side", "low");
+		add_meta_box("alignment", "Alignment", array( $this, 'worker_alignment'), "workers", "side", "low");
+		add_meta_box("division", "Company/Division", array( $this, 'worker_division'), "workers", "side", "low");
+		
 		add_meta_box("birthday", "Birthday", array( $this, 'worker_birthday'), "workers", "side", "low");		
 		add_meta_box("height", "Height", array( $this, 'worker_height'), "workers", "side", "low");		
 		add_meta_box("weight", "Weight", array( $this, 'worker_weight'), "workers", "side", "low");		
-		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");		
-		}
+		add_meta_box("position", "Staff Position", array( $this, 'worker_position'), "workers", "side", "low");	
+
+	}
 	
 	function worker_aka() {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$aka = $custom["aka"][0];
 		?>
-		<input name="worker_aka" type="text" size="150" value="<?php echo $aka; ?>" />
+		<input name="worker_aka" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $aka; ?>" />
 		<?php
 	}
 	function worker_theme() {
@@ -115,19 +122,49 @@ class Wrestleefedmanager_Worker {
 		$themelink = $custom["themelink"][0];
 		
 		?>
-		<table>
-		<tr><td><label>Name:</label><td><td><input name="worker_theme_name" type="text" size="150" value="<?php echo $themename; ?>" /></td></tr>
-		<tr><td><label>Artist:</label><td><td><input name="worker_theme_artist" type="text" size="150" value="<?php echo $themeartist; ?>" /></td></tr>
-		<tr><td><label>Link:</label><td><td><input name="worker_theme_link" type="text" size="150" value="<?php echo $themelink; ?>" /></td></tr>
+		<table style="width:100%;box-sizing:border-box;">
+		<tr><td><label>Name:</label></td><td><input name="worker_theme_name" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themename; ?>" /></td></tr>
+		<tr><td><label>Artist:</label></td><td><input name="worker_theme_artist" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themeartist; ?>" /></td></tr>
+		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themelink; ?>" /></td></tr>
 		</table>
 		<?php
+	}
+	
+	function worker_weightclass()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$wc = $custom["weightclass"][0];
+		//echo 'Saved value : ' . $wc . '<br />';
+		efed_select_from_entries('worker_weightclass', 'weightclasses', $wc);
+	}
+	function worker_alignment()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$align = $custom["alignment"][0];
+		efed_select_from_entries('worker_alignment', 'alignments', $align);
+	}
+	function worker_gender()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$gender = $custom["gender"][0];
+		efed_select_from_entries('worker_gender', 'genders', $gender);
+	}
+	function worker_division()
+	{
+		global $post;
+		$custom = get_post_custom($post->ID);
+		$div = unserialize($custom["federation"][0]);
+		efed_select_from_entries('worker_division', 'feds', $div, true, true);
 	}
 	function worker_signature() {
 		global $post;
 		$custom = get_post_custom($post->ID);
 		$signatures = $custom["signatures"][0];
 		?>
-		<input name="worker_signatures" type="text" size="150" value="<?php echo $signatures; ?>" />
+		<input name="worker_signatures" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $signatures; ?>" />
 		<?php
 	}
 	function worker_associates() {
@@ -135,7 +172,7 @@ class Wrestleefedmanager_Worker {
 		$custom = get_post_custom($post->ID);
 		$associates = $custom["associates"][0];
 		?>
-		<input name="worker_associates" type="text" size="150" value="<?php echo $associates; ?>" />
+		<input name="worker_associates" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $associates; ?>" />
 		<?php
 	}
 	function worker_portrait() {}
@@ -185,7 +222,20 @@ class Wrestleefedmanager_Worker {
 		update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
 		update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
 		update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
-		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);		
+		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);			
+		
+		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
+		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
+		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
+		
+		if ( ! add_post_meta( $post->ID, "federation", $_POST["worker_division"], true ) ) { 
+			update_post_meta( $post->ID, "federation", $_POST["worker_division"] );
+		}
+		
+		//update_post_meta($post->ID, "federation", $_POST["worker_division"]);
+		
+		//echo 'Saved weightclass as ' .  $_POST["worker_weightclass"];
+		//echo 'Saved weightclass as --' . get_post_meta( get_the_ID(), 'weightclass', true) . '--<br />';
 	}
 	
 	/*
