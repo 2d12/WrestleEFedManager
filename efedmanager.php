@@ -365,35 +365,38 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 			if (count($divfilter[0] > 0))
 			{
 				$postfeds = get_post_meta($thispost->ID, 'federation');			
-				foreach ($postfeds[0] as $postfed)
+				if (count($postfeds) > 0 && array_key_exists(0, $postfeds) && is_array($postfeds[0]) )
 				{
-					foreach ($divfilter[0] as $filterfed)
+					foreach ($postfeds[0] as $postfed)
 					{
-						if ($postfed == $filterfed)
+						foreach ($divfilter[0] as $filterfed)
 						{
-						if (get_post_type($thispost->ID) == 'workers')						
-						{
-							$retarr[] = array(
-							'title' => $thispost->post_title, 
-							'id' => $thispost->ID,
-							'federation' => get_post_meta($thispost->ID, 'federation'),
-							'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
-							'gender' => get_post_meta($thispost->ID, 'gender', true),
-							'alignment' => get_post_meta($thispost->ID, 'walignment', true),
-							);
-						}
-						else
-						{
-							$retarr[] = array(
-							'title' => $thispost->post_title, 
-							'id' => $thispost->ID,
-							'federation' => get_post_meta($thispost->ID, 'federation'),
-							'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
-							'gender' => get_post_meta($thispost->ID, 'gender', true),
-							'alignment' => get_post_meta($thispost->ID, 'alignment', true),
-							);
-						}
-						break 2;
+							if ($postfed == $filterfed)
+							{
+							if (get_post_type($thispost->ID) == 'workers')						
+							{
+								$retarr[] = array(
+								'title' => $thispost->post_title, 
+								'id' => $thispost->ID,
+								'federation' => get_post_meta($thispost->ID, 'federation'),
+								'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+								'gender' => get_post_meta($thispost->ID, 'gender', true),
+								'alignment' => get_post_meta($thispost->ID, 'walignment', true),
+								);
+							}
+							else
+							{
+								$retarr[] = array(
+								'title' => $thispost->post_title, 
+								'id' => $thispost->ID,
+								'federation' => get_post_meta($thispost->ID, 'federation'),
+								'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+								'gender' => get_post_meta($thispost->ID, 'gender', true),
+								'alignment' => get_post_meta($thispost->ID, 'alignment', true),
+								);
+							}
+							break 2;
+							}
 						}
 					}
 				}

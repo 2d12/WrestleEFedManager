@@ -86,36 +86,43 @@ class efedmanager_Roster {
 	
 	
 	function initialize_roster_post_type() {
-		/*
-		add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, 
-		              string $context = 'advanced', string $priority = 'default', array $callback_args = null )*/
 		add_meta_box("filters", "Filters", array( $this, 'roster_filters'), "roster", "normal", "low");
-		//add_meta_box("data", "Data", array ($this, 'roster_data'), "roster", "normal", "low");
 		}
-		
-		/*function roster_data()
-		{
-			global $post;
-			$custom = get_post_custom($post->ID);
-			
-			print_r($custom);
-		}*/
 
     /**
      *
      */
     function roster_filters() {
 		global $post;
+		$team = "";
+		$fed = array();
+		$wc = array();
+		$gender = array();
+		$align = array();
+		$showfed = false;
+		$showwc = false;
+		$showgender = false;
+		$showalign = false;
+		
 		$custom = get_post_custom($post->ID);
-		$team = $custom["team"][0];
-		$fed = unserialize($custom["fedfilter"][0]);
-		$wc = unserialize($custom["wcfilter"][0]);
-		$gender = unserialize($custom["genderfilter"][0]);
-		$align = unserialize($custom["alignfilter"][0]);
-		$showfed = $custom["showfed"][0];
-		$showwc = $custom["showwc"][0];
-		$showgender = $custom["showgender"][0];
-		$showalign = $custom["showalign"][0];
+		if (array_key_exists("team", $custom))
+			$team = $custom["team"][0];
+		if (array_key_exists("fedfilter", $custom))
+			$fed = unserialize($custom["fedfilter"][0]);
+		if (array_key_exists("wcfilter", $custom))
+			$wc = unserialize($custom["wcfilter"][0]);
+		if (array_key_exists("genderfilter", $custom))
+			$gender = unserialize($custom["genderfilter"][0]);
+		if (array_key_exists("alignfilter", $custom))
+			$align = unserialize($custom["alignfilter"][0]);
+		if (array_key_exists("showfed", $custom))
+			$showfed = $custom["showfed"][0];
+		if (array_key_exists("showwc", $custom))
+			$showwc = $custom["showwc"][0];
+		if (array_key_exists("showgender", $custom))
+			$showgender = $custom["showgender"][0];
+		if (array_key_exists("showalign", $custom))
+			$showalign = $custom["showalign"][0];
 
 		?>
 		<table>
