@@ -101,14 +101,15 @@ function run_efedmanager() {
  function efed_list_child_matches() 
 		{ 
 		wp_reset_postdata();
-		global $post; 		 
+		global $post; 		
+		$string = "";
 		$args = array(
-			post_type => 'match',
-			order_by => 'parent menu_order',
-			order => 'ASC',
-			post_parent => $post->ID,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'parent menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->ID,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		if (is_singular('match') ) {		
 			$childpages = efed_list_posts( $args );
@@ -126,12 +127,12 @@ function efed_previous_match($show_title = false)
 		wp_reset_postdata();
 		global $post; 		 
 		$args = array(
-			post_type => 'match',
-			order_by => 'menu_order',
-			order => 'ASC',
-			post_parent => $post->post_parent,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->post_parent,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		
 		$originalID = $post->ID;
@@ -165,12 +166,12 @@ function efed_next_match($show_title = false)
 		wp_reset_postdata();
 		global $post; 		 
 		$args = array(
-			post_type => 'match',
-			order_by => 'menu_order',
-			order => 'ASC',
-			post_parent => $post->post_parent,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->post_parent,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		$lastposts = get_posts($args);
 		$string = "";
