@@ -155,6 +155,10 @@ class efedmanager_Roster {
 	
 	function save_roster(){
 		global $post;
+		if (count ($_POST) <= 0)
+			return;
+
+
 		update_post_meta($post->ID, "team", $_POST["roster_team"]);
 		
 		update_post_meta($post->ID, "fedfilter", $_POST["roster_federation"]);

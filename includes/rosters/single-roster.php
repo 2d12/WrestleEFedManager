@@ -74,7 +74,10 @@ get_header(); ?>
 							}
 							if ($showalign) 
 							{
-								echo '<td>' . get_the_title($row['alignment']) .'</td>';
+								if ($row['alignment'] )
+									echo '<td>' . get_the_title($row['alignment']) .'</td>';
+								else
+									echo '<td></td>';
 							}
 							
 							echo '</tr>';

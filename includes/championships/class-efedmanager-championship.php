@@ -141,6 +141,9 @@ class efedmanager_Championship {
 	
 	function save_championship(){
 		global $post;
+		if (count ($_POST) <= 0)
+			return;
+
 		
 		update_post_meta($post->ID, "federations", $_POST["championship_federation"]);
 		update_post_meta($post->ID, "weightclasses", $_POST["championship_weightclass"]);

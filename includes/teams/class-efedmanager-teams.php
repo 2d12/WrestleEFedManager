@@ -164,7 +164,9 @@ class efedmanager_Team {
 	
 	function save_team(){
 		global $post;
-		
+		if (count ($_POST) <= 0)
+			return;
+
 		update_post_meta($post->ID, "signatures", $_POST["team_signatures"]);
 		update_post_meta($post->ID, "themename", $_POST["team_theme_name"]);
 		update_post_meta($post->ID, "themeartist", $_POST["team_theme_artist"]);

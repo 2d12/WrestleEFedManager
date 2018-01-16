@@ -57,7 +57,7 @@ get_header(); ?>
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
 							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
 							<table>
-								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
+								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'walignment', true)); ?></td></tr>
 								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>
 
 								<tr><td>Gender:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'gender', true )); ?></td></tr>
@@ -172,7 +172,7 @@ get_header(); ?>
 
 						echo '<a href="' . get_permalink($matchID) . '">'. get_the_title($matchID) . '</a></td><td>';
 						echo $matchResult;
-						$victors = $match->victors;
+						//$victors = $matchResult->victors;
 				
 						echo '</td></tr>';
 					}
@@ -208,6 +208,7 @@ get_header(); ?>
 							echo '<tr><td>' . $reign['win'] ;
 							if (count($reign['cowinner']) > 0)
 							{
+								$cochampcount = 0;
 								echo '<br />With ';
 								foreach($reign['cowinner'] as $cowin)
 								{
@@ -259,6 +260,7 @@ get_header(); ?>
 								echo '<td>';
 								if (count($reign['next']) > 0)
 								{
+									$champcount = 0;
 									foreach($reign['next'] as $champid)
 									{
 										$champcount++;

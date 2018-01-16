@@ -38,7 +38,7 @@ class efedmanager_Match {
 			'title'             => $item->post_title,
 			'url'               => get_permalink($item),
 			'menu_item_parent'  => $parent_menu_ID,
-			'post_parent'       => $parentID,
+			'post_parent'       => $parent_post_id,
 			'menu_order'        => ++$ordermin,
 			'db_id'             => $item->ID,
 			'type'              => 'custom',
@@ -155,6 +155,9 @@ class efedmanager_Match {
 		
 	function save_match(){
 		global $post;
+		if (count ($_POST) <= 0)
+			return;
+
 		
 		update_post_meta($post->ID, "competitors", $_POST["match_competitors"]);
 		update_post_meta($post->ID, "referee", $_POST["match_referee"]);

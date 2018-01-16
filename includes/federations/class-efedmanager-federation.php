@@ -129,11 +129,20 @@ class efedmanager_Federation {
 	
 	function save_fed(){
 		global $post;
-		
-		update_post_meta($post->ID, "abbreviation", $_POST["fed_abbreviation"]);
-		update_post_meta($post->ID, "founded", $_POST["fed_founddate"]);
-		update_post_meta($post->ID, "closed", $_POST["fed_closedate"]);
-		update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
+		if (count ($_POST) <= 0)
+			return;
+		if ( !add_post_meta( $post->ID, "abbreviation", $_POST["fed_abbreviation"], true) ) {
+			update_post_meta($post->ID, "abbreviation", $_POST["fed_abbreviation"]);
+		}
+		if ( !add_post_meta( $post->ID, "founded", $_POST["fed_founddate"], true) ) {
+			update_post_meta($post->ID, "founded", $_POST["fed_founddate"]);
+		}
+		if ( !add_post_meta( $post->ID, "closed", $_POST["fed_closedate"], true) ) {
+			update_post_meta($post->ID, "closed", $_POST["fed_closedate"]);
+		}
+		if ( !add_post_meta( $post->ID, "owner", $_POST["fed_owner"], true) ) {
+			update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
+		}
 	}
 	
 	function display_federation_template ($template_path) {
