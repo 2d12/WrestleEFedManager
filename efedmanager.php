@@ -697,14 +697,14 @@ function efed_worker_title_history($workerID)
 function efed_title_history($titleID)
 {
 	$args = array(
-		post_type => 'match',
-		order_by => 'date',
-		order => 'ASC',
-		post_status => 'publish',
-		posts_per_page => -1,		
-		meta_query => array(),
+		'post_type' => 'match',
+		'order_by' => 'date',
+		'order' => 'ASC',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,		
+		'meta_query' => array(),
 		);
-	$args[meta_query][] = array(
+	$args['meta_query'][] = array(
 			'key' => 'title',
 			'value' => $titleID,
 		);
@@ -731,22 +731,25 @@ function efed_title_history($titleID)
 			if ($lastID >= 0)
 			{
 				$loserNum = array_search($reigns[$lastID]['champion'], $champList);
-			
+
 				$reigns[$lastID]['loss'] = get_the_date( 'Y-m-d', $titleMatch->ID );
 				$rend = strtotime(get_the_date( 'Y-m-d', $titleMatch->ID ));
 				$rstart = strtotime($reigns[$lastID]['win']);
 				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
 				$reigns[$lastID]['length'] = $rdiff;
-				if (array_key_exists($loserNum, $reignCount))
-				{	
-					$reignCount[$loserNum]['days'] = $reignCount[$loserNum]['days'] + $rdiff;
-				}
-				else
+				if ($loserNum != false)
 				{
-					$reignCount[$loserNum]['days'] = $rdiff;
+					if (array_key_exists($loserNum, $reignCount) && array_key_exists ('days', $reignCount[$loserNum]))
+					{	
+						$reignCount[$loserNum]['days'] = $reignCount[$loserNum]['days'] + $rdiff;
+					}
+					else
+					{
+						$reignCount[$loserNum]['days'] = $rdiff;
+					}
+					if ($reigns[$lastID]['champion'] != "Title Vacant")
+						$reigns[$lastID]['total'] = $reignCount[$loserNum]['days'];
 				}
-				if ($reigns[$lastID]['champion'] != "Title Vacant")
-					$reigns[$lastID]['total'] = $reignCount[$loserNum]['days'];
 			}
 			
 			if (array_key_exists($victorNum, $reignCount))
@@ -782,7 +785,10 @@ function efed_title_history($titleID)
 				$rstart = strtotime($reigns[$lastID]['win']);
 				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
 				$reigns[$lastID]['length'] = $rdiff;
-				$reignCount[$victorNum]['days'] = $reignCount[$victorNum]['days'] + $rdiff;
+				if (array_key_exists($victorNum, $reignCount) && array_key_exists('days',$reignCount[$victorNum]))
+					$reignCount[$victorNum]['days'] = $reignCount[$victorNum]['days'] + $rdiff;
+				else
+					$reignCount[$victorNum]['days'] = $rdiff;
 				$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
 			}
 			
@@ -803,7 +809,10 @@ function efed_title_history($titleID)
 	$rstart = strtotime($reigns[$lastID]['win']);
 	$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
 	$reigns[$lastID]['length'] = $rdiff;
-	$reignCount[$victorNum]['days'] += $rdiff;
+	if (array_key_exists($victorNum, $reignCount) && array_key_exists('days', $reignCount[$victorNum]))
+		$reignCount[$victorNum]['days'] += $rdiff;
+	else
+		$reignCount[$victorNum]['days'] = $rdiff;
 	if ($reigns[$lastID]['champion'] != "Title Vacant")
 		$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
 	

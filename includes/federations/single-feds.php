@@ -7,10 +7,10 @@ get_header(); ?>
 <div id="primary" class="content-area content-area-no-sidebar">
     <div id="content" role="main"> 
     <?php
-    $mypost = array( 'post_type' => 'feds', );
-    $loop = new WP_Query( $mypost );
+    //$mypost = array( 'post_type' => 'feds', );
+    //$loop = new WP_Query( $mypost );
     ?>
-    <?php while ( $loop->have_posts() ) : $loop->the_post();?>
+    <?php /*while ( $loop->have_posts() ) : $loop->the_post();*/?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php if ( ! is_single() ) { ?><a href="<?php echo esc_url( get_permalink() ); ?>"><?php } ?>
 
@@ -32,7 +32,7 @@ get_header(); ?>
 					
 						<!-- Display logo and vital statistics in right-aligned floating div -->
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
-							<div align="center">LOGO</div>
+							<div align="center"><?php the_post_thumbnail(); ?></div>
 							<dl>
 								<?php if (strlen(get_post_meta( get_the_ID(), 'founded', true )) > 0) {
 									?>
@@ -75,7 +75,7 @@ get_header(); ?>
 			</div>
 		</article>
  
-    <?php endwhile; ?>
+    <?php /*endwhile;*/ ?>
 	</div>
 </div>
 <?php wp_reset_query(); ?>

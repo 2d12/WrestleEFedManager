@@ -87,9 +87,12 @@ get_header(); ?>
 								<?php
 									$gen = get_post_meta( get_the_ID(), 'genders');
 									$genderarray = array();
-									foreach ($gen[0] as $genID)
+									if (is_array($gen[0]) && count($gen[0]) > 0)
 									{
-										$genderarray[] = get_the_title($genID);
+										foreach ($gen as $genID)
+										{
+											$genderarray[] = get_the_title($genID);
+										}
 									}
 									
 								?>
@@ -97,6 +100,7 @@ get_header(); ?>
 								<?php 
 								if (count($genderarray) > 0)
 								{
+							
 									foreach($genderarray as $gendername)
 									{
 										echo $gendername . '<br />';
@@ -152,9 +156,13 @@ get_header(); ?>
 					{
 						echo '<tr>';
 						echo '<td>';
-						foreach ($reign['champion'] as $champ)
+						$champarray = array();
+						if (array_key_exists('champion',$reign) && is_array($reign['champion']) && count($reign['champion']) > 0)
 						{
-							$champarray[$champ] = get_the_title($champ);
+							foreach ($reign['champion'] as $champ)
+							{
+								$champarray[$champ] = get_the_title($champ);
+							}
 						}
 
 						$champcount = 0;
