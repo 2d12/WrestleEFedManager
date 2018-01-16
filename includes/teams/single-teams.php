@@ -88,7 +88,7 @@ get_header(); ?>
 				<div class="entry-content">
 
 					<?php
-					
+					$link = $tname = $artist = false;
 					if (strlen(get_post_meta( get_the_ID(), 'themelink', true )) > 0)
 					{$link = true;}
 					if (strlen(get_post_meta( get_the_ID(), 'themename', true )) > 0)
@@ -153,13 +153,6 @@ get_header(); ?>
 					the_content();
 					echo "<br />";
 					
-					if (strlen(get_post_meta( get_the_ID(), 'associates', true )) > 0)
-					{
-						echo "<b>Associates: </b>";
-						echo get_post_meta( get_the_ID(), 'associates', true );
-						echo "<br />";
-					}
-
 					$matchHistory = efed_worker_match_history(get_the_ID());
 					if (count($matchHistory) > 0)
 					{						
@@ -176,7 +169,7 @@ get_header(); ?>
 
 						echo '<a href="' . get_permalink($matchID) . '">'. get_the_title($matchID) . '</a></td><td>';
 						echo $matchResult;
-						$victors = $match->victors;
+						//$victors = $match->victors;
 				
 						echo '</td></tr>';
 					}
@@ -214,6 +207,7 @@ get_header(); ?>
 							echo '<td>';
 							if (count($reign['prev']) > 0)
 							{
+								$champcount = 0;
 								foreach($reign['prev'] as $champid)
 								{
 									$champcount++;

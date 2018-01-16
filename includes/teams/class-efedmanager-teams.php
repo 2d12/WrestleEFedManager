@@ -100,8 +100,12 @@ class efedmanager_Team {
 	function team_members()
 	{
 		global $post;
+		$competitors = array();
+		$associates = array();
 		$custom = get_post_custom($post->ID);
-		$competitors = unserialize($custom["team_competitors"][0]);
+		if (array_key_exists("team_competitors", $custom))
+			$competitors = unserialize($custom["team_competitors"][0]);
+		if (array_key_exists("associates", $custom))
 		$associates =  unserialize($custom["associates"][0]);
 		
 		echo '<table width="100%"><tr><th>Competitors</th><th>Associates</th></tr><tr><td>';
@@ -114,51 +118,57 @@ class efedmanager_Team {
 	
 	function team_theme() {
 		global $post;
+		$themename = "";
+		$themeartist = "";
+		$themelink = "";
+		
 		$custom = get_post_custom($post->ID);
-		$themename = $custom["themename"][0];
-		$themeartist = $custom["themeartist"][0];
-		$themelink = $custom["themelink"][0];
+		
+		if (array_key_exists("themename", $custom))
+			$themename = $custom["themename"][0];
+		if (array_key_exists("themeartist", $custom))
+			$themeartist = $custom["themeartist"][0];
+		if (array_key_exists("themelink", $custom))
+			$themelink = $custom["themelink"][0];
 		
 		?>
 		<table style="width:100%;box-sizing:border-box;">
-		<tr><td><label>Name:</label></td><td><input name="team_theme_name" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themename; ?>" /></td></tr>
-		<tr><td><label>Artist:</label></td><td><input name="team_theme_artist" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themeartist; ?>" /></td></tr>
-		<tr><td><label>Link:</label></td><td><input name="team_theme_link" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themelink; ?>" /></td></tr>
+		<tr><td><label>Name:</label></td><td><input name="worker_theme_name" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themename; ?>" /></td></tr>
+		<tr><td><label>Artist:</label></td><td><input name="worker_theme_artist" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themeartist; ?>" /></td></tr>
+		<tr><td><label>Link:</label></td><td><input name="worker_theme_link" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $themelink; ?>" /></td></tr>
 		</table>
 		<?php
+
 	}
 	
 	function team_alignment()
 	{
 		global $post;
+		$align = "";
 		$custom = get_post_custom($post->ID);
-		$align = $custom["alignment"][0];
+		if (array_key_exists("alignment", $custom))
+			$align = $custom["alignment"][0];
 		efed_select_from_entries('team_alignment', 'alignments', $align);
 	}
 	
 	function team_division()
 	{
 		global $post;
+		$div = "";
 		$custom = get_post_custom($post->ID);
-		$div = unserialize($custom["federation"][0]);
+		if (array_key_exists("federation", $custom))
+			$div = unserialize($custom["federation"][0]);
 		efed_select_from_entries('team_division', 'feds', $div, true, true);
 	}
 	
 	function team_signature() {
 		global $post;
+		$signatures = "";
 		$custom = get_post_custom($post->ID);
-		$signatures = $custom["signatures"][0];
+		if (array_key_exists("signatures", $custom))
+			$signatures = $custom["signatures"][0];
 		?>
 		<input name="team_signatures" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $signatures; ?>" />
-		<?php
-	}
-	
-	function team_associates() {
-		global $post;
-		$custom = get_post_custom($post->ID);
-		$associates = $custom["associates"][0];
-		?>
-		<input name="team_associates" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $associates; ?>" />
 		<?php
 	}
 	
