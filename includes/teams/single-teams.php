@@ -238,6 +238,7 @@ get_header(); ?>
 								echo '<td>';
 								if (count($reign['next']) > 0)
 								{
+									$champcount = 0;
 									foreach($reign['next'] as $champid)
 									{
 										$champcount++;

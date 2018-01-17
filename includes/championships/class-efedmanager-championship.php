@@ -149,13 +149,20 @@ class efedmanager_Championship {
 	
 	function save_championship(){
 		global $post;
+		
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'championship' post, don't update it.
+		if ( "championship" != $post_type ) return;	
 		if (count ($_POST) <= 0)
 			return;
 
-		
-		update_post_meta($post->ID, "federations", $_POST["championship_federation"]);
-		update_post_meta($post->ID, "weightclasses", $_POST["championship_weightclass"]);
-		update_post_meta($post->ID, "genders", $_POST["championship_gender"]);
+		if (array_key_exists("championship_federation", $_POST))
+			update_post_meta($post->ID, "federations", $_POST["championship_federation"]);
+		if (array_key_exists("championship_weightclass", $_POST))
+			update_post_meta($post->ID, "weightclasses", $_POST["championship_weightclass"]);
+		if (array_key_exists("championship_gender", $_POST))
+			update_post_meta($post->ID, "genders", $_POST["championship_gender"]);
 		update_post_meta($post->ID, "type", $_POST["championship_type"]);
 	}
 

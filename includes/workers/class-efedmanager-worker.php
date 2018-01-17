@@ -155,8 +155,8 @@ class efedmanager_Worker {
 		global $post;
 		$align = "";
 		$custom = get_post_custom($post->ID);
-		if (array_key_exists("walignment", $custom))
-			$align = $custom["walignment"][0];
+		if (array_key_exists("alignment", $custom))
+			$align = $custom["alignment"][0];
 		efed_select_from_entries('worker_alignment', 'alignments', $align);
 	}
 	function worker_gender()
@@ -171,7 +171,7 @@ class efedmanager_Worker {
 	function worker_division()
 	{
 		global $post;
-		$div = "";
+		$div = array();
 		$custom = get_post_custom($post->ID);
 		if (array_key_exists("federation", $custom))
 			$div = unserialize($custom["federation"][0]);
@@ -241,50 +241,30 @@ class efedmanager_Worker {
 	
 	function save_worker(){
 		global $post;
+		
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'worker' post, don't update it.
+		if ( "workers" != $post_type ) return;
+		
 		if (count ($_POST) <= 0)
 			return;
-		if ( !add_post_meta( $post->ID, "aka", $_POST["worker_aka"], true) ) {
-			update_post_meta($post->ID, "aka", $_POST["worker_aka"]);
-		}
-		if ( !add_post_meta( $post->ID, "birth", $_POST["worker_birth"], true) ) {
-			update_post_meta($post->ID, "birth", $_POST["worker_birth"]);
-		}		
-		if ( !add_post_meta( $post->ID, "height", $_POST["worker_height"], true) ) {
-			update_post_meta($post->ID, "height", $_POST["worker_height"]);
-		}		
-		if ( !add_post_meta( $post->ID, "weight", $_POST["worker_weight"], true) ) {
-			update_post_meta($post->ID, "weight", $_POST["worker_weight"]);
-		}		
-		if ( !add_post_meta( $post->ID, "associates", $_POST["worker_associates"], true) ) {
-			update_post_meta($post->ID, "associates", $_POST["worker_associates"]);
-		}		
-		if ( !add_post_meta( $post->ID, "signatures", $_POST["worker_signatures"], true) ) {
-			update_post_meta($post->ID, "signatures", $_POST["worker_signatures"]);
-		}		
-		if ( !add_post_meta( $post->ID, "themename", $_POST["worker_theme_name"], true) ) {
-			update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
-		}		
-		if ( !add_post_meta( $post->ID, "themeartist", $_POST["worker_theme_artist"], true) ) {
-			update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
-		}		
-		if ( !add_post_meta( $post->ID, "themelink", $_POST["worker_theme_link"], true) ) {
-			update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
-		}		
-		if ( !add_post_meta( $post->ID, "position", $_POST["worker_staffpos"], true) ) {
-			update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);
-		}		
-		if ( !add_post_meta( $post->ID, "weightclass", $_POST["worker_weightclass"], true) ) {
-			update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
-		}		
-		if ( !add_post_meta( $post->ID, "gender", $_POST["worker_gender"], true) ) {
-			update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
-		}		
-		if ( !add_post_meta( $post->ID, "walignment", $_POST["worker_alignment"], true) ) {
-			update_post_meta($post->ID, "walignment", $_POST["worker_alignment"]);
-		}				
-		if ( ! add_post_meta( $post->ID, "federation", $_POST["worker_division"], true ) ) { 
-			update_post_meta( $post->ID, "federation", $_POST["worker_division"] );
-		}
+		update_post_meta($post->ID, "aka", $_POST["worker_aka"]);
+		update_post_meta($post->ID, "birth", $_POST["worker_birth"]);
+		update_post_meta($post->ID, "height", $_POST["worker_height"]);
+		update_post_meta($post->ID, "weight", $_POST["worker_weight"]);
+		update_post_meta($post->ID, "associates", $_POST["worker_associates"]);
+		update_post_meta($post->ID, "signatures", $_POST["worker_signatures"]);
+		update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
+		update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
+		update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
+		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);
+		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
+		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
+		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
+		if (array_key_exists("worker_division", $_POST))
+			update_post_meta($post->ID, "federation", $_POST["worker_division"]);
+	
 
 	}
 }

@@ -155,6 +155,10 @@ class efedmanager_Match {
 		
 	function save_match(){
 		global $post;
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'match' post, don't update it.
+		if ( "match" != $post_type ) return;
 		if (count ($_POST) <= 0)
 			return;
 

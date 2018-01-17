@@ -174,6 +174,11 @@ class efedmanager_Team {
 	
 	function save_team(){
 		global $post;
+		
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'teams' post, don't update it.
+		if ( "teams" != $post_type ) return;
 		if (count ($_POST) <= 0)
 			return;
 

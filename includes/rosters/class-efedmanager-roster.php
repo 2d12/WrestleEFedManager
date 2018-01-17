@@ -162,6 +162,10 @@ class efedmanager_Roster {
 	
 	function save_roster(){
 		global $post;
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'roster' post, don't update it.
+		if ( "roster" != $post_type ) return;
 		if (count ($_POST) <= 0)
 			return;
 

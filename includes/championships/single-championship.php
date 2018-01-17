@@ -37,9 +37,12 @@ get_header(); ?>
 								<?php
 									$fed = get_post_meta( get_the_ID(), 'federations');
 									$fedarray = array();
-									foreach ($fed[0] as $fedID)
+									if (array_key_exists(0, $fed) && is_array($fed[0]))
 									{
-										$fedarray[] = get_the_title($fedID);
+										foreach ($fed[0] as $fedID)
+										{
+											$fedarray[] = get_the_title($fedID);
+										}
 									}
 									
 								?>
@@ -62,9 +65,12 @@ get_header(); ?>
 								<?php
 									$wc = get_post_meta( get_the_ID(), 'weightclasses');
 									$weightsarray = array();
-									foreach ($wc[0] as $weightID)
+									if (array_key_exists(0, $wc) && is_array($wc[0]))
 									{
-										$weightsarray[] = get_the_title($weightID);
+										foreach ($wc[0] as $weightID)
+										{
+											$weightsarray[] = get_the_title($weightID);
+										}
 									}
 									
 								?>
@@ -87,7 +93,7 @@ get_header(); ?>
 								<?php
 									$gen = get_post_meta( get_the_ID(), 'genders');
 									$genderarray = array();
-									if (is_array($gen[0]) && count($gen[0]) > 0)
+									if (array_key_exists(0, $gen) && is_array($gen[0]) && count($gen[0]) > 0)
 									{
 										foreach ($gen as $genID)
 										{
@@ -130,11 +136,12 @@ get_header(); ?>
 					<?php 
 					wp_reset_postdata();
 					the_content(); 
+					$titleHistory = efed_title_history(get_the_ID());
+					
 					?>
 					<div id="clickToShowTitleHistory"><button onclick="toggleTitleHistory()">Title History</button></div>
 					<div id="titleHistory" style="float: left; width: 63%; margin:0 0 10px 10px; padding: 5px 0;display:none; background: #e5e5e5;">
 					<?php
-					$titleHistory = efed_title_history(get_the_ID());
 					//echo '<pre>';
 					//print_r ($titleHistory);
 					//echo '</pre>';

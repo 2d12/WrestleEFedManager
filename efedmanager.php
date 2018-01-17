@@ -84,10 +84,10 @@ function run_efedmanager() {
 			setup_postdata($thispost);
 
 			$string = $string . "<li";
-			if ( $thispost->ID == $wp_query->post->ID ) 
+			/*if ( $thispost->ID == $wp_query->post->ID ) 
 				{
 					$string = $string . " class=\"current\""; 
-				}
+				}*/
 			
 			$string = $string . ">";
 			$string = $string . "<a href=";
@@ -271,12 +271,12 @@ function efed_get_options($postType, $option_array, $selected, $hierarchy, $leve
 			if ($hierarchy)
 			{
 				$args = array(
-					post_type => $postType,
-					orderby => 'title',
-					order => 'ASC',
-					post_status => 'publish',
-					posts_per_page => -1,	
-					post_parent => $entry['id'],
+					'post_type' => $postType,
+					'orderby' => 'title',
+					'order' => 'ASC',
+					'post_status' => 'publish',
+					'posts_per_page' => -1,	
+					'post_parent' => $entry['id'],
 				);
 				$lastposts = get_posts($args);
 				
@@ -808,18 +808,19 @@ function efed_title_history($titleID)
 		}
 		
 	}
-	
-	$rend = time();
-	$rstart = strtotime($reigns[$lastID]['win']);
-	$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
-	$reigns[$lastID]['length'] = $rdiff;
-	if (array_key_exists($victorNum, $reignCount) && array_key_exists('days', $reignCount[$victorNum]))
-		$reignCount[$victorNum]['days'] += $rdiff;
-	else
-		$reignCount[$victorNum]['days'] = $rdiff;
-	if ($reigns[$lastID]['champion'] != "Title Vacant")
-		$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
-	
+	if (count($reigns) > 0)
+	{
+		$rend = time();
+		$rstart = strtotime($reigns[$lastID]['win']);
+		$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
+		$reigns[$lastID]['length'] = $rdiff;
+		if (array_key_exists($victorNum, $reignCount) && array_key_exists('days', $reignCount[$victorNum]))
+			$reignCount[$victorNum]['days'] += $rdiff;
+		else
+			$reignCount[$victorNum]['days'] = $rdiff;
+		if ($reigns[$lastID]['champion'] != "Title Vacant")
+			$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
+	}
 	//print_r($reignCount);
 /* 	echo '<pre>';
 	print_r ($reigns);

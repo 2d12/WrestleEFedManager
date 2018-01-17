@@ -129,6 +129,10 @@ class efedmanager_Federation {
 	
 	function save_fed(){
 		global $post;
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'feds' post, don't update it.
+		if ( "feds" != $post_type ) return;
 		if (count ($_POST) <= 0)
 			return;
 		if ( !add_post_meta( $post->ID, "abbreviation", $_POST["fed_abbreviation"], true) ) {
