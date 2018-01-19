@@ -73,7 +73,24 @@ get_header(); ?>
 									echo '<table>';
 									foreach ($champs as $key=>$title)
 									{
-										echo '<tr><td>' . get_the_title($key) . '</td><td>' . get_the_title($title[0]) . '</td></tr>';
+										echo '<tr><td><a href="' . get_permalink($key) . '">' . get_the_title($key) . '</a></td><td>';
+									
+										$victorcount = 0;
+										if (count($title[0]) > 0)
+										{
+											foreach($title[0] as $victorID)
+											{
+												$victorcount++;
+												if ($victorcount > 1 && count($title) > 2)
+													echo ', ';
+												else if ($victorcount > 1)
+													echo ' ';
+												if ($victorcount > 1 && $victorcount == count($title[0]))
+													echo 'and ';
+												echo '<a href="' . get_permalink($victorID) . '">' . get_the_title($victorID) . '</a>';										
+											}
+										}
+										echo '</td></tr>';
 									}
 									echo '</table>';
 								}

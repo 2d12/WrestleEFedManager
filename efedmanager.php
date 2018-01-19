@@ -692,19 +692,68 @@ function efed_get_current_champions($fedID)
 	$retarr = array();
 	foreach ($titles as $title)
 	{	
+		/*echo '<pre>';
+		print_r($title);*/
 		$feds = get_post_meta($title->ID, 'federations');
 		if (in_array($fedID, $feds[0]))
 		{
 			// This title belongs to us.
-			$currentChamp = efed_title_history($title->ID, true);
-			$retarr[$title->ID] = $currentChamp['champion'];
+			$newargs = array (
+					'post_type' => 'match',
+					'order_by' => 'date',
+					'order' => 'DESC',
+					'post_status' => 'publish',
+					'posts_per_page' => 1,	
+			);
+			
+			$newargs['meta_query'][] = array(
+				'key' => 'titleupdate',
+				'value' => array ('newchamp', 'vacate'),
+				'compare' => 'IN',
+			);
+			$newargs['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $title->ID,
+			);
+			$lastChange = get_posts($newargs);
+			$currentChamp = get_post_meta($lastChange[0]->ID, 'victors');
+			
+			/*print_r($currentChamp);
+			echo '</pre>';
+			echo '---------';*/
+			$retarr[$title->ID] = $currentChamp;
 		}
 	}
 	
 	return $retarr;
 }
 
-function efed_title_history($titleID, $currentOnly = false)
+function efed_get_current_champion($titleID)
+{
+	$newargs = array (
+					'post_type' => 'match',
+					'order_by' => 'date',
+					'order' => 'DESC',
+					'post_status' => 'publish',
+					'posts_per_page' => 1,	
+			);
+			
+			$newargs['meta_query'][] = array(
+				'key' => 'titleupdate',
+				'value' => array ('newchamp', 'vacate'),
+				'compare' => 'IN',
+			);
+			$newargs['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $title->ID,
+			);
+			$lastChange = get_posts($newargs);
+			$currentChamp = get_post_meta($lastChange[0]->ID, 'victors');
+			return $currentChamp;
+}
+
+
+function efed_title_history($titleID)
 {
 	$args = array(
 		'post_type' => 'match',
@@ -712,11 +761,11 @@ function efed_title_history($titleID, $currentOnly = false)
 		'order' => 'ASC',
 		'post_status' => 'publish',
 		'posts_per_page' => -1,		
-		'meta_query' => array(
-			'key' => 'title',
-			'value' => $titleID,
-			),
 		);
+	$args['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $titleID,
+			);
 	
 	$out = get_posts($args);
 
@@ -727,10 +776,6 @@ function efed_title_history($titleID, $currentOnly = false)
 	$lastID = -1;
 	foreach ($out as $titleMatch)
 	{
-echo '<pre>';
-print_r($titleMatch);
-print_r(get_post_meta($titleMatch->ID, 'title'));
-echo '</pre>';
 		$defenseType = get_post_meta($titleMatch->ID, 'titleupdate', true);
 		$victor = get_post_meta($titleMatch->ID, 'victors')[0];
 		if ($defenseType == "newchamp" )
@@ -835,10 +880,7 @@ echo '</pre>';
  	/*echo '<pre>';
 	print_r ($reigns);
 	echo '</pre>';*/ 
-	if ($currentOnly)
-	{
-		return $reigns[$lastID];
-	}
+
 	return $reigns;	
 }
 
