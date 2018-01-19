@@ -19,14 +19,14 @@ class efedmanager_weightclass {
 	}
 	
 	function display_weightclass_template ($template_path) {
-		if ( get_post_type() == 'weightclasss' ) {
+		if ( get_post_type() == 'weightclasses' ) {
         if ( is_single() ) {
             // checks if the file exists in the theme first,
             // otherwise serve the file from the plugin
-            if ( $theme_file = locate_template( array ( 'single-weightclasss.php' ) ) ) {
+            if ( $theme_file = locate_template( array ( 'single-weightclasses.php' ) ) ) {
                 $template_path = $theme_file;
             } else {
-                $template_path = plugin_dir_path( __FILE__ ) . '/single-weightclasss.php';
+                $template_path = plugin_dir_path( __FILE__ ) . '/single-weightclasses.php';
 				}
 			}
 		}

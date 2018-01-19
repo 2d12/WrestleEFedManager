@@ -28,10 +28,23 @@ get_header(); ?>
 				</header>
 	 
 					<!-- Sidebar Data -->
-					<div style="float: right; width: 27%; margin:0 0 10px 10px; padding: 5px 0;">
+					<div style="float: right; width: 55%; margin:0 0 10px 10px; padding: 5px 0;">
 					
+						<?php 
+							$testThumbnail = (get_the_post_thumbnail() == "");
+							$testFounded = (strlen(get_post_meta( get_the_ID(), 'founded', true )) == 0);
+							$testClosed = (strlen(get_post_meta( get_the_ID(), 'closed', true )) == 0);
+							$testOwner = (strlen(get_post_meta( get_the_ID(), 'owner', true )) == 0);
+							if ($testThumbnail && $testFounded && $testClosed && $testOwner)
+							{ // Do Nothing -- Nothing to Display 
+						
+						    }
+							else
+							{
+						?>
 						<!-- Display logo and vital statistics in right-aligned floating div -->
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
+						
 							<div align="center"><?php the_post_thumbnail(); ?></div>
 							<dl>
 								<?php if (strlen(get_post_meta( get_the_ID(), 'founded', true )) > 0) {
@@ -49,26 +62,32 @@ get_header(); ?>
 							</dl>
 							<!-- LOGO ->?php the_post_thumbnail( array( 100, 100 ) ); ? -->
 						</div>
-						
+							<?php } // End of else ?>
 						<!-- Diplay current champions, if any, in a right-aligned floating div -->
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
 							<div align="center">Current Champions</div>
-							<dl>
-								<dd style="float: left; width: 50%; height: 50px; padding: 0 5px; margin: 0">Universal Champion</dd>     <dt style="float: left; width: 50%;  height: 50px; padding: 0 5px; margin: 0">Brock Lesnar</dt>
-								<dd style="float: left; width: 50%; height: 50px;  padding: 0 5px; margin: 0">World Champion</dd>        <dt style="float: left; width: 50%;  height: 50px; padding: 0 5px; margin: 0">A J Styles</dt>
-								<dd style="float: left; width: 50%; height: 50px;  padding: 0 5px; margin: 0">Tag Team Champion</dd>     <dt style="float: left; width: 50%;  height: 50px; padding: 0 5px; margin: 0">The New Day</dt>
-								<dd style="float: left; width: 50%; height: 50px;  padding: 0 5px; margin: 0">Cruiserweight Champion</dd><dt style="float: left; width: 50%;  height: 50px; padding: 0 5px; margin: 0">Enzio</dt>
-							</dl>
+							<?php 
+								$champs = efed_get_current_champions(get_the_ID());
+								if (count($champs) > 0)
+								{
+									echo '<table>';
+									foreach ($champs as $key=>$title)
+									{
+										echo '<tr><td>' . get_the_title($key) . '</td><td>' . get_the_title($title[0]) . '</td></tr>';
+									}
+									echo '</table>';
+								}
+							?>
 						</div>
 						
 						<!-- Diplay recent shows, with links -->
-						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
+						<!--div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
 							<div align="center">Latest Episodes</div>
 							<a href="">WWE Raw</a><br />
 							<a href="">WWE Smackdown Live</a><br />
 							<a href="">WWE NXT</a><br />
 							<a href="">TLC: Tables, Ladders, & Chairs</a><br />
-						</div>
+						</div -->
 				</div>
 				<!-- Display contents -->
 				<div class="entry-content"><?php the_content(); ?></div>
