@@ -362,7 +362,7 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 		
 		foreach($lastposts as $thispost)
 		{
-			if (count($divfilter[0] > 0))
+			if (array_key_exists(0, $divfilter) && is_array($divfilter[0]) && count($divfilter[0] > 0))
 			{
 				$postfeds = get_post_meta($thispost->ID, 'federation');			
 				if (count($postfeds) > 0 && array_key_exists(0, $postfeds) && is_array($postfeds[0]) )
