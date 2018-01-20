@@ -57,11 +57,20 @@ get_header(); ?>
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
 							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
 							<table>
+								<?php if (get_post_meta(get_the_ID(), 'alignment') > 0) { ?>
 								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
+								<?php }
+								if (get_post_meta(get_the_ID(), 'weightclass') > 0) { ?>
 								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>
-
+								<?php }
+								if (strlen(get_post_meta(get_the_ID(), 'position')) > 0) { ?>
+								<tr><td>Position:</td><td><?php echo get_post_meta( get_the_ID(), 'position', true);?></td></tr>
+								<?php }
+								if (get_post_meta(get_the_ID(), 'gender') > 0) { ?>
 								<tr><td>Gender:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'gender', true )); ?></td></tr>
-								<?php if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
+								
+								<?php }
+								if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
 									?>
 									<tr><td>Height:</td><td><?php echo get_post_meta( get_the_ID(), 'height', true ); ?></td></tr>
 								<?php }

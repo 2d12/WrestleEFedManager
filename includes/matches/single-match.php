@@ -37,10 +37,11 @@ get_header(); ?>
 					</script>
 					
 					<?php 
-					if (get_post_meta( get_the_ID(), 'victors', true ) != "" || get_post_meta( get_the_ID(), 'time', true ) != "" || 
+					if (count(get_post_meta( get_the_ID(), 'victors', true )) > 0 || get_post_meta( get_the_ID(), 'time', true ) != "" || 
 						get_post_meta( get_the_ID(), 'finisher', true ) != "" || get_post_meta( get_the_ID(), 'referee', true ) != "" || 
-						get_post_meta (get_the_ID(), 'title', true) != "" )
+						get_post_meta (get_the_ID(), 'title', true) != -1 )
 						{
+							
 					?>
 					
 					<div id="clicktoshow"><button onclick="myFunction()">Results</button></div>

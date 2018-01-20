@@ -232,8 +232,8 @@ class efedmanager_Worker {
 		global $post;
 		$staffpos = "";
 		$custom = get_post_custom($post->ID);
-		if (array_key_exists("staffpos", $custom))
-			$staffpos = $custom["staffpos"][0];
+		if (array_key_exists("position", $custom))
+			$staffpos = $custom["position"][0];
 		?>
 		<input name="worker_staffpos" type="text" value="<?php echo $staffpos; ?>" />
 		<?php
