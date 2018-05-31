@@ -38,7 +38,7 @@ class efedmanager_Match {
 			'title'             => $item->post_title,
 			'url'               => get_permalink($item),
 			'menu_item_parent'  => $parent_menu_ID,
-			'post_parent'       => $parentID,
+			'post_parent'       => $parent_post_id,
 			'menu_order'        => ++$ordermin,
 			'db_id'             => $item->ID,
 			'type'              => 'custom',
@@ -155,6 +155,13 @@ class efedmanager_Match {
 		
 	function save_match(){
 		global $post;
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'match' post, don't update it.
+		if ( "match" != $post_type ) return;
+		if (count ($_POST) <= 0)
+			return;
+
 		
 		update_post_meta($post->ID, "competitors", $_POST["match_competitors"]);
 		update_post_meta($post->ID, "referee", $_POST["match_referee"]);
@@ -182,9 +189,13 @@ class efedmanager_Match {
 	function match_titles()
 	{
 		global $post;
+		$belts = "";
+		$result = "";
 		$custom = get_post_custom($post->ID);
-		$belts = $custom["title"][0];
-		$result = $custom["titleupdate"][0];
+		if (array_key_exists("title", $custom))
+			$belts = $custom["title"][0];
+		if (array_key_exists("titleupdate", $custom))
+			$result = $custom["titleupdate"][0];
 		?>
 		<table>
 		<tr><th>Title</th><th>Result</th></tr>
@@ -206,39 +217,53 @@ class efedmanager_Match {
 	function match_weightclass()
 	{
 		global $post;
+		$wc = "";
 		$custom = get_post_custom($post->ID);
-		$wc = $custom["weightclass"][0];
+		if (array_key_exists("weightclass", $custom))
+			$wc = $custom["weightclass"][0];
 		//echo 'Saved value : ' . $wc . '<br />';
 		efed_select_from_entries('match_weightclass', 'weightclasses', $wc);
 	}
 	function match_gender()
 	{
 		global $post;
+		$gender = "";
 		$custom = get_post_custom($post->ID);
-		$gender = $custom["gender"][0];
+		if (array_key_exists("gender", $custom))
+			$gender = $custom["gender"][0];
 		efed_select_from_entries('match_gender', 'genders', $gender);
 	}
 	function match_division()
 	{
 		global $post;
+		$div = "";
 		$custom = get_post_custom($post->ID);
-		$div = $custom["division"][0];
+		if (array_key_exists("division", $custom))
+			$div = $custom["division"][0];
 		efed_select_from_entries('match_division', 'feds', $div, true, true);
 	}
 	
 	function match_competitors() {
 		global $post;
+		$competitors = array();
 		$custom = get_post_custom($post->ID);
-		$competitors = unserialize($custom["competitors"][0]);
+		if (array_key_exists("competitors", $custom))
+			$competitors = unserialize($custom["competitors"][0]);
 		efed_select_from_entries('match_competitors', array('workers', 'teams'), $competitors, true);
 	}
 	
 	function match_results() {
 		global $post;
+		$victors = array();
+		$time = "";
+		$finisher = "";
 		$custom = get_post_custom($post->ID);
-		$victors = unserialize($custom["victors"][0]);
-		$time = $custom["time"][0];
-		$finisher = $custom["finisher"][0];
+		if (array_key_exists("victors", $custom))
+			$victors = unserialize($custom["victors"][0]);
+		if (array_key_exists("time", $custom))
+			$time = $custom["time"][0];
+		if (array_key_exists("finisher", $custom))
+			$finisher = $custom["finisher"][0];	
 		?>
 		<table>
 		<tr><td><label>Victor(s):</label></td><td><?php efed_select_from_entries('match_victors', array('workers', 'teams'), $victors, true);?></td></tr>
@@ -249,8 +274,10 @@ class efedmanager_Match {
 	
 	function match_referee() {
 		global $post;
+		$referee = "";
 		$custom = get_post_custom($post->ID);
-		$referee = $custom["referee"][0];
+		if (array_key_exists("referee", $custom))
+			$referee = $custom["referee"][0];
 		?>
 		<input name="match_referee" type="text" value="<?php echo $referee; ?>" />
 		<?php
@@ -258,8 +285,10 @@ class efedmanager_Match {
 	
 	function match_rating() {
 		global $post;
+		$rating = "";
 		$custom = get_post_custom($post->ID);
-		$rating = $custom["rating"][0];
+		if (array_key_exists("rating", $custom))
+			$rating = $custom["rating"][0];
 		?>
 		<input name="match_rating" type="text" value="<?php echo $rating; ?>" />
 		<?php

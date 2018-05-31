@@ -76,14 +76,15 @@ class efedmanager_Federation {
 		add_meta_box("abbreviation", "Abbreviation", array( $this, 'fed_abbr'), "feds", "normal", "low");
 		add_meta_box("founded", "Founded", array( $this, 'fed_founded'), "feds", "side", "low");
 		add_meta_box("closed", "Closed", array( $this, 'fed_closed'), "feds", "side", "low");
-		add_meta_box("logo", "Logo", array( $this, 'fed_logo'), "feds", "normal", "low");
 		add_meta_box("owner", "Owner", array( $this, 'fed_owner'), "feds", "side", "low");		
 	}
 	
 	function fed_abbr(){
 		global $post;
+		$abbr = "";
 		$custom = get_post_custom($post->ID);
-		$abbr = $custom["abbreviation"][0];
+		if (array_key_exists("abbreviation", $custom))
+			$abbr = $custom["abbreviation"][0];
 		?>
 		<label>Abbr:</label>
 		<input name="fed_abbreviation" type="text" value="<?php echo $abbr; ?>" />
@@ -92,8 +93,10 @@ class efedmanager_Federation {
 	
 	function fed_founded(){
 		global $post;
+		$founded = "";
 		$custom = get_post_custom($post->ID);
-		$founded = $custom["founded"][0];
+		if (array_key_exists("founded", $custom))
+			$founded = $custom["founded"][0];
 		?>
 		<label>Founded:</label>
 		<input name="fed_founddate" value="<?php echo $founded; ?>" />
@@ -102,25 +105,22 @@ class efedmanager_Federation {
 	
 	function fed_closed(){
 		global $post;
+		$closed = "";
 		$custom = get_post_custom($post->ID);
-		$closed = $custom["closed"][0];
+		if (array_key_exists("closed", $custom))
+			$closed = $custom["closed"][0];
 		?>
 		<label>Closed:</label>
 		<input name="fed_closedate" value="<?php echo $closed; ?>" />
 		<?php
 	}
 	
-	
-	function fed_parent(){
-	}
-	
-	function fed_logo(){
-	}
-	
 	function fed_owner(){
 		global $post;
+		$owner = "";
 		$custom = get_post_custom($post->ID);
-		$owner = $custom["owner"][0];
+		if (array_key_exists("owner", $custom))
+			$owner = $custom["owner"][0];
 		?>
 		<label>Owner:</label>
 		<input name="fed_owner" value="<?php echo $owner; ?>" />
@@ -129,11 +129,24 @@ class efedmanager_Federation {
 	
 	function save_fed(){
 		global $post;
-		
-		update_post_meta($post->ID, "abbreviation", $_POST["fed_abbreviation"]);
-		update_post_meta($post->ID, "founded", $_POST["fed_founddate"]);
-		update_post_meta($post->ID, "closed", $_POST["fed_closedate"]);
-		update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'feds' post, don't update it.
+		if ( "feds" != $post_type ) return;
+		if (count ($_POST) <= 0)
+			return;
+		if ( !add_post_meta( $post->ID, "abbreviation", $_POST["fed_abbreviation"], true) ) {
+			update_post_meta($post->ID, "abbreviation", $_POST["fed_abbreviation"]);
+		}
+		if ( !add_post_meta( $post->ID, "founded", $_POST["fed_founddate"], true) ) {
+			update_post_meta($post->ID, "founded", $_POST["fed_founddate"]);
+		}
+		if ( !add_post_meta( $post->ID, "closed", $_POST["fed_closedate"], true) ) {
+			update_post_meta($post->ID, "closed", $_POST["fed_closedate"]);
+		}
+		if ( !add_post_meta( $post->ID, "owner", $_POST["fed_owner"], true) ) {
+			update_post_meta($post->ID, "owner", $_POST["fed_owner"]);
+		}
 	}
 	
 	function display_federation_template ($template_path) {
@@ -152,45 +165,4 @@ class efedmanager_Federation {
 	}
 	
 }
-
-/*
-//hook into the init action and call create_topics_nonhierarchical_taxonomy when it fires
- 
-add_action( 'init', 'create_topics_nonhierarchical_taxonomy', 0 );
- 
-function create_topics_nonhierarchical_taxonomy() {
- 
-// Labels part for the GUI
- 
-  $labels = array(
-    'name' => _x( 'Topics', 'taxonomy general name' ),
-    'singular_name' => _x( 'Topic', 'taxonomy singular name' ),
-    'search_items' =>  __( 'Search Topics' ),
-    'popular_items' => __( 'Popular Topics' ),
-    'all_items' => __( 'All Topics' ),
-    'parent_item' => null,
-    'parent_item_colon' => null,
-    'edit_item' => __( 'Edit Topic' ), 
-    'update_item' => __( 'Update Topic' ),
-    'add_new_item' => __( 'Add New Topic' ),
-    'new_item_name' => __( 'New Topic Name' ),
-    'separate_items_with_commas' => __( 'Separate topics with commas' ),
-    'add_or_remove_items' => __( 'Add or remove topics' ),
-    'choose_from_most_used' => __( 'Choose from the most used topics' ),
-    'menu_name' => __( 'Topics' ),
-  ); 
- 
-// Now register the non-hierarchical taxonomy like tag
- 
-  register_taxonomy('topics','post',array(
-    'hierarchical' => false,
-    'labels' => $labels,
-    'show_ui' => true,
-    'show_admin_column' => true,
-    'update_count_callback' => '_update_post_term_count',
-    'query_var' => true,
-    'rewrite' => array( 'slug' => 'topic' ),
-  ));
-}
-*/
 endif;

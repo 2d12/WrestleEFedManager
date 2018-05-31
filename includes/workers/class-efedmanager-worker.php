@@ -108,18 +108,28 @@ class efedmanager_Worker {
 	
 	function worker_aka() {
 		global $post;
+		$aka = "";
 		$custom = get_post_custom($post->ID);
-		$aka = $custom["aka"][0];
+		if (array_key_exists("aka", $custom))
+			$aka = $custom["aka"][0];
 		?>
 		<input name="worker_aka" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $aka; ?>" />
 		<?php
 	}
 	function worker_theme() {
 		global $post;
+		$themename = "";
+		$themeartist = "";
+		$themelink = "";
+		
 		$custom = get_post_custom($post->ID);
-		$themename = $custom["themename"][0];
-		$themeartist = $custom["themeartist"][0];
-		$themelink = $custom["themelink"][0];
+		
+		if (array_key_exists("themename", $custom))
+			$themename = $custom["themename"][0];
+		if (array_key_exists("themeartist", $custom))
+			$themeartist = $custom["themeartist"][0];
+		if (array_key_exists("themelink", $custom))
+			$themelink = $custom["themelink"][0];
 		
 		?>
 		<table style="width:100%;box-sizing:border-box;">
@@ -133,69 +143,86 @@ class efedmanager_Worker {
 	function worker_weightclass()
 	{
 		global $post;
+		$wc = "";
 		$custom = get_post_custom($post->ID);
-		$wc = $custom["weightclass"][0];
+		if (array_key_exists("weightclass", $custom))
+			$wc = $custom["weightclass"][0];
 		//echo 'Saved value : ' . $wc . '<br />';
 		efed_select_from_entries('worker_weightclass', 'weightclasses', $wc);
 	}
 	function worker_alignment()
 	{
 		global $post;
+		$align = "";
 		$custom = get_post_custom($post->ID);
-		$align = $custom["alignment"][0];
+		if (array_key_exists("alignment", $custom))
+			$align = $custom["alignment"][0];
 		efed_select_from_entries('worker_alignment', 'alignments', $align);
 	}
 	function worker_gender()
 	{
 		global $post;
+		$gender = "";
 		$custom = get_post_custom($post->ID);
-		$gender = $custom["gender"][0];
+		if (array_key_exists("gender", $custom))
+			$gender = $custom["gender"][0];
 		efed_select_from_entries('worker_gender', 'genders', $gender);
 	}
 	function worker_division()
 	{
 		global $post;
+		$div = array();
 		$custom = get_post_custom($post->ID);
-		$div = unserialize($custom["federation"][0]);
+		if (array_key_exists("federation", $custom))
+			$div = unserialize($custom["federation"][0]);
 		efed_select_from_entries('worker_division', 'feds', $div, true, true);
 	}
 	function worker_signature() {
 		global $post;
+		$signatures = "";
 		$custom = get_post_custom($post->ID);
-		$signatures = $custom["signatures"][0];
+		if (array_key_exists("signatures", $custom))
+			$signatures = $custom["signatures"][0];
 		?>
 		<input name="worker_signatures" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $signatures; ?>" />
 		<?php
 	}
 	function worker_associates() {
 		global $post;
+		$associates = "";
 		$custom = get_post_custom($post->ID);
-		$associates = $custom["associates"][0];
+		if (array_key_exists("associates", $custom))
+			$associates = $custom["associates"][0];
 		?>
 		<input name="worker_associates" type="text" style="width:100%;box-sizing:border-box;" value="<?php echo $associates; ?>" />
 		<?php
 	}
-	function worker_portrait() {}
 	function worker_birthday() {
 		global $post;
+		$birth = "";
 		$custom = get_post_custom($post->ID);
-		$birth = $custom["birth"][0];
+		if (array_key_exists("birth", $custom))
+			$birth = $custom["birth"][0];
 		?>
 		<input name="worker_birth" type="text" value="<?php echo $birth; ?>" />
 		<?php
 	}
 	function worker_height() {
 		global $post;
+		$height = "";
 		$custom = get_post_custom($post->ID);
-		$height = $custom["height"][0];
+		if (array_key_exists("height", $custom))
+			$height = $custom["height"][0];
 		?>
 		<input name="worker_height" type="text" value="<?php echo $height; ?>" />
 		<?php
 	}
 	function worker_weight() {
 		global $post;
+		$weight = "";
 		$custom = get_post_custom($post->ID);
-		$weight = $custom["weight"][0];
+		if (array_key_exists("weight", $custom))
+			$weight = $custom["weight"][0];
 		?>
 		<input name="worker_weight" type="text" value="<?php echo $weight; ?>" />
 		<?php
@@ -203,8 +230,10 @@ class efedmanager_Worker {
 	
 	function worker_position() {
 		global $post;
+		$staffpos = "";
 		$custom = get_post_custom($post->ID);
-		$staffpos = $custom["staffpos"][0];
+		if (array_key_exists("position", $custom))
+			$staffpos = $custom["position"][0];
 		?>
 		<input name="worker_staffpos" type="text" value="<?php echo $staffpos; ?>" />
 		<?php
@@ -213,6 +242,13 @@ class efedmanager_Worker {
 	function save_worker(){
 		global $post;
 		
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'worker' post, don't update it.
+		if ( "workers" != $post_type ) return;
+		
+		if (count ($_POST) <= 0)
+			return;
 		update_post_meta($post->ID, "aka", $_POST["worker_aka"]);
 		update_post_meta($post->ID, "birth", $_POST["worker_birth"]);
 		update_post_meta($post->ID, "height", $_POST["worker_height"]);
@@ -222,43 +258,14 @@ class efedmanager_Worker {
 		update_post_meta($post->ID, "themename", $_POST["worker_theme_name"]);
 		update_post_meta($post->ID, "themeartist", $_POST["worker_theme_artist"]);
 		update_post_meta($post->ID, "themelink", $_POST["worker_theme_link"]);
-		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);			
-		
+		update_post_meta($post->ID, "position", $_POST["worker_staffpos"]);
 		update_post_meta($post->ID, "weightclass", $_POST["worker_weightclass"]);
 		update_post_meta($post->ID, "gender", $_POST["worker_gender"]);
 		update_post_meta($post->ID, "alignment", $_POST["worker_alignment"]);
-		
-		if ( ! add_post_meta( $post->ID, "federation", $_POST["worker_division"], true ) ) { 
-			update_post_meta( $post->ID, "federation", $_POST["worker_division"] );
-		}
-		
-		//update_post_meta($post->ID, "federation", $_POST["worker_division"]);
-		
-		//echo 'Saved weightclass as ' .  $_POST["worker_weightclass"];
-		//echo 'Saved weightclass as --' . get_post_meta( get_the_ID(), 'weightclass', true) . '--<br />';
-	}
-	
-	/*
-	<?php the_terms( $post->ID, 'weightclass', 'Weight Class: ', ', ', ' ' ); ?>
-	
-	
+		if (array_key_exists("worker_division", $_POST))
+			update_post_meta($post->ID, "federation", $_POST["worker_division"]);
 	
 
-	
-	function display_federation_template ($template_path) {
-		if ( get_post_type() == 'feds' ) {
-        if ( is_single() ) {
-            // checks if the file exists in the theme first,
-            // otherwise serve the file from the plugin
-            if ( $theme_file = locate_template( array ( 'single-feds.php' ) ) ) {
-                $template_path = $theme_file;
-            } else {
-                $template_path = plugin_dir_path( __FILE__ ) . '/single-feds.php';
-            }
-        }
-    }
-    return $template_path;
 	}
-	*/
 }
 endif;

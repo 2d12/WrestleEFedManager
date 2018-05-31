@@ -84,10 +84,10 @@ function run_efedmanager() {
 			setup_postdata($thispost);
 
 			$string = $string . "<li";
-			if ( $thispost->ID == $wp_query->post->ID ) 
+			/*if ( $thispost->ID == $wp_query->post->ID ) 
 				{
 					$string = $string . " class=\"current\""; 
-				}
+				}*/
 			
 			$string = $string . ">";
 			$string = $string . "<a href=";
@@ -101,14 +101,15 @@ function run_efedmanager() {
  function efed_list_child_matches() 
 		{ 
 		wp_reset_postdata();
-		global $post; 		 
+		global $post; 		
+		$string = "";
 		$args = array(
-			post_type => 'match',
-			order_by => 'parent menu_order',
-			order => 'ASC',
-			post_parent => $post->ID,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'parent menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->ID,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		if (is_singular('match') ) {		
 			$childpages = efed_list_posts( $args );
@@ -126,12 +127,12 @@ function efed_previous_match($show_title = false)
 		wp_reset_postdata();
 		global $post; 		 
 		$args = array(
-			post_type => 'match',
-			order_by => 'menu_order',
-			order => 'ASC',
-			post_parent => $post->post_parent,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->post_parent,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		
 		$originalID = $post->ID;
@@ -165,12 +166,12 @@ function efed_next_match($show_title = false)
 		wp_reset_postdata();
 		global $post; 		 
 		$args = array(
-			post_type => 'match',
-			order_by => 'menu_order',
-			order => 'ASC',
-			post_parent => $post->post_parent,
-			post_status => 'publish',
-			posts_per_page => -1,			
+			'post_type' => 'match',
+			'order_by' => 'menu_order',
+			'order' => 'ASC',
+			'post_parent' => $post->post_parent,
+			'post_status' => 'publish',
+			'posts_per_page' => -1,			
 		);
 		$lastposts = get_posts($args);
 		$string = "";
@@ -206,16 +207,16 @@ function efed_next_match($show_title = false)
 function efed_select_from_entries($varname, $postType, $selected, $multiple=false, $use_hierarchy=false)
 {	
 	$args = array(
-			post_type => $postType,
-			orderby => 'title',
-			order => 'ASC',
-			post_status => 'publish',
-			posts_per_page => -1,	
+			'post_type' => $postType,
+			'orderby' => 'title',
+			'order' => 'ASC',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,	
 		);
 		
 		if ($use_hierarchy)
 		{
-				$args[post_parent] = 0;
+				$args['post_parent'] = 0;
 		}
 		
 		
@@ -243,7 +244,7 @@ function efed_select_from_entries($varname, $postType, $selected, $multiple=fals
 				echo '"';
 			}
 			echo ' style="width:100%;box-sizing:border-box;">';
-			if (!$multiple) echo '<option value="">&nbsp;</option>';
+			if (!$multiple) echo '<option value="-1">&nbsp;</option>';
 			efed_get_options($postType, $retarr, $selected, $use_hierarchy);
 			
 			echo '</select>';
@@ -270,12 +271,12 @@ function efed_get_options($postType, $option_array, $selected, $hierarchy, $leve
 			if ($hierarchy)
 			{
 				$args = array(
-					post_type => $postType,
-					orderby => 'title',
-					order => 'ASC',
-					post_status => 'publish',
-					posts_per_page => -1,	
-					post_parent => $entry['id'],
+					'post_type' => $postType,
+					'orderby' => 'title',
+					'order' => 'ASC',
+					'post_status' => 'publish',
+					'posts_per_page' => -1,	
+					'post_parent' => $entry['id'],
 				);
 				$lastposts = get_posts($args);
 				
@@ -305,25 +306,25 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 {
 	
 	$args = array(
-			post_type => array(),
-			order_by => 'title',
-			order => 'ASC',
-			post_status => 'publish',
-			posts_per_page => -1,		
-			meta_query => array()			
+			'post_type' => array(),
+			'order_by' => 'title',
+			'order' => 'ASC',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,		
+			'meta_query' => array()			
 		);
 	if ($teamfilter=="individual" || $teamfilter == "" || $teamfilter == "all")
 	{
-		$args[post_type][] = 'workers';
+		$args['post_type'][] = 'workers';
 	}
 	if ($teamfilter=="team" || $teamfilter == "" || $teamfilter == "all")
 	{
-		$args[post_type][] = 'teams';
+		$args['post_type'][] = 'teams';
 	}
 	
 	if (count($weightfilter[0]) > 0 )
 	{
-		$args[meta_query][] = array(
+		$args['meta_query'][] = array(
 			'key' => 'weightclass',
 			'value' => $weightfilter[0],
 			'compare' => 'IN',
@@ -332,7 +333,7 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 	
 	if (count($genderfilter[0]) > 0 )
 	{
-		$args[meta_query][] = array(
+		$args['meta_query'][] = array(
 			'key' => 'gender',
 			'value' => $genderfilter[0],
 			'compare' => 'IN',
@@ -341,9 +342,9 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 	
 	if (count($alignfilter[0]) > 0 )
 	{
-		$args[meta_query][] = array(
-			'key' => 'alignment',
-			'value' => $alignfilter[0],
+		$args['meta_query'][] = array(
+			'key'     => 'alignment',
+			'value'   => $alignfilter[0],
 			'compare' => 'IN',
 		);
 	}
@@ -353,50 +354,68 @@ function efed_populate_roster($teamfilter, $divfilter, $weightfilter, $genderfil
 		
 		foreach($lastposts as $thispost)
 		{
-			if (count($divfilter[0] > 0))
+			if (array_key_exists(0, $divfilter) && is_array($divfilter) && count($divfilter[0] > 0))
 			{
 				$postfeds = get_post_meta($thispost->ID, 'federation');			
-				foreach ($postfeds[0] as $postfed)
+				if (count($postfeds) > 0 && array_key_exists(0, $postfeds) && is_array($postfeds[0]) )
 				{
-					foreach ($divfilter[0] as $filterfed)
+					foreach ($postfeds[0] as $postfed)
 					{
-						if ($postfed == $filterfed)
+						foreach ($divfilter[0] as $filterfed)
 						{
-						$retarr[] = array(
-							'title' => $thispost->post_title, 
-							'id' => $thispost->ID,
-							'federation' => get_post_meta($thispost->ID, 'federation'),
-							'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
-							'gender' => get_post_meta($thispost->ID, 'gender', true),
-							'alignment' => get_post_meta($thispost->ID, 'alignment', true),
-							);
-						break 2;
+							if ($postfed == $filterfed)
+							{
+							
+								$retarr[] = array(
+								'title' => $thispost->post_title, 
+								'id' => $thispost->ID,
+								'federation' => get_post_meta($thispost->ID, 'federation'),
+								'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+								'gender' => get_post_meta($thispost->ID, 'gender', true),
+								'alignment' => get_post_meta($thispost->ID, 'alignment', true),
+								);
+							
+								break 2;
+							}
 						}
 					}
 				}
 			}
 			else
 			{
-				$retarr[] = array(
+				if (get_post_type($thispost->ID) == 'workers')						
+				{
+					$retarr[] = array(
 					'title' => $thispost->post_title, 
 					'id' => $thispost->ID,
-					'federation' => get_post_meta($thispost->ID, 'federation', false),
+					'federation' => get_post_meta($thispost->ID, 'federation'),
+					'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
+					'gender' => get_post_meta($thispost->ID, 'gender', true),
+					'alignment' => get_post_meta($thispost->ID, 'walignment', true),
+					);
+				}
+				else
+				{
+					$retarr[] = array(
+					'title' => $thispost->post_title, 
+					'id' => $thispost->ID,
+					'federation' => get_post_meta($thispost->ID, 'federation'),
 					'weightclass' => get_post_meta($thispost->ID, 'weightclass', true),
 					'gender' => get_post_meta($thispost->ID, 'gender', true),
 					'alignment' => get_post_meta($thispost->ID, 'alignment', true),
 					);
+				}
 			}
 		}
-
 	return $retarr;
 }
 
 function efed_get_all_worker_ids($workerID)
 {
 	$args = array(
-		post_type => 'teams',
-		post_status => 'publish',
-		posts_per_page => -1,		
+		'post_type' => 'teams',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,		
 		);
 		
 	$allteams = get_posts($args);
@@ -423,11 +442,11 @@ function efed_worker_match_history($workerID)
 	$myids = efed_get_all_worker_ids($workerID);
 	
 	$args = array(
-			post_type => 'match',
-			order_by => 'date',
-			order => 'DESC',
-			post_status => 'publish',
-			posts_per_page => -1,		
+			'post_type' => 'match',
+			'order_by' => 'date',
+			'order' => 'DESC',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,		
 		);
 	$out = get_posts($args);
 	$rv = array();
@@ -438,7 +457,7 @@ function efed_worker_match_history($workerID)
 	
 		foreach ($myids as $anID)
 		{
-			if (in_array($anID, $competitors[0]))
+			if ($competitors[0] != null && count($competitors[0]) > 0 && in_array($anID, $competitors[0]))
 			{
 				if (in_array($anID, $victors[0]))
 				{
@@ -465,14 +484,14 @@ function efed_worker_title_history($workerID)
 	$myids = efed_get_all_worker_ids($workerID);
 	
 	$args = array(
-	post_type => 'match',
-	order_by => 'date',
-	order => 'ASC',
-	post_status => 'publish',
-	posts_per_page => -1,		
+		'post_type' => 'match',
+		'order_by' => 'date',
+		'order' => 'ASC',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,		
 	);
 	
-	$args[meta_query][] = array(
+	$args['meta_query'][] = array(
 		'key' => 'titleupdate',
 		'value' => array ('newchamp', 'vacate'),
 		'compare' => 'IN',
@@ -491,7 +510,10 @@ function efed_worker_title_history($workerID)
 		//print_r($victor);
 		//echo '</pre>';
 		//echo 'Is ' . $workerID . " in array?  ";
-		$workerIsVictor = (count(array_intersect($myids, $victor)) > 0);
+		if (is_array($victor))
+			$workerIsVictor = (count(array_intersect($myids, $victor)) > 0);
+		else
+			$workerIsVictor = (in_array($victor, $myids));
 		//echo $workerIsVictor?"YES<br />":"NO<br />";
 		$victorNum = array_search($victor, $champList);
 		if ($victorNum == false)
@@ -503,7 +525,10 @@ function efed_worker_title_history($workerID)
 		$defenseType = get_post_meta($change->ID, 'titleupdate', true);
 		$title = get_post_meta($change->ID, 'title', true);
 		
-		$workerIsLoser = (count(array_intersect($myids, $champList[$lastChamp[$title]])) > 0);
+		if (count($lastChamp) > 0 && array_key_exists($title, $lastChamp) && array_key_exists($lastChamp[$title], $champList))
+			$workerIsLoser = (count(array_intersect($myids, $champList[$lastChamp[$title]])) > 0);
+		else
+			$workerIsLoser = false;
 		
 		
 		if ($defenseType == 'newchamp')
@@ -517,14 +542,19 @@ function efed_worker_title_history($workerID)
 				{
 					$workerHistory[$title] = array();
 				}
-				if (array_key_exists('reigns', $workerHistory[$title] == false))
+				if (array_key_exists('reigns', $workerHistory[$title]) == false)
 				{
 					$workerHistory[$title]['reigns'] = array();
 				}
 				
+				if (array_key_exists($title, $lastChamp) && array_key_exists($lastChamp[$title], $champList))
+					$prev = $champList[$lastChamp[$title]];
+				else
+					$prev = array();
+				
 				$workerHistory[$title]['reigns'][] = array(
 					'win' => get_the_date( 'Y-m-d', $change->ID ),
-					'prev' => $champList[$lastChamp[$title]],
+					'prev' => $prev,
 					'next' => null,
 					'lost' => null,
 					'cowinner' => array(),
@@ -648,22 +678,97 @@ function efed_worker_title_history($workerID)
 	return $workerHistory;
 }
 
+function efed_get_current_champions($fedID)
+{
+	$args = array(
+		'post_type' => 'championship',
+		'order_by' => 'date',
+		'order' => 'ASC',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,		
+		);
+		
+	$titles = get_posts($args);
+	$retarr = array();
+	foreach ($titles as $title)
+	{	
+		/*echo '<pre>';
+		print_r($title);*/
+		$feds = get_post_meta($title->ID, 'federations');
+		if (in_array($fedID, $feds[0]))
+		{
+			// This title belongs to us.
+			$newargs = array (
+					'post_type' => 'match',
+					'order_by' => 'date',
+					'order' => 'DESC',
+					'post_status' => 'publish',
+					'posts_per_page' => 1,	
+			);
+			
+			$newargs['meta_query'][] = array(
+				'key' => 'titleupdate',
+				'value' => array ('newchamp', 'vacate'),
+				'compare' => 'IN',
+			);
+			$newargs['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $title->ID,
+			);
+			$lastChange = get_posts($newargs);
+			$currentChamp = get_post_meta($lastChange[0]->ID, 'victors');
+			
+			/*print_r($currentChamp);
+			echo '</pre>';
+			echo '---------';*/
+			$retarr[$title->ID] = $currentChamp;
+		}
+	}
+	
+	return $retarr;
+}
+
+function efed_get_current_champion($titleID)
+{
+	$newargs = array (
+					'post_type' => 'match',
+					'order_by' => 'date',
+					'order' => 'DESC',
+					'post_status' => 'publish',
+					'posts_per_page' => 1,	
+			);
+			
+			$newargs['meta_query'][] = array(
+				'key' => 'titleupdate',
+				'value' => array ('newchamp', 'vacate'),
+				'compare' => 'IN',
+			);
+			$newargs['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $title->ID,
+			);
+			$lastChange = get_posts($newargs);
+			$currentChamp = get_post_meta($lastChange[0]->ID, 'victors');
+			return $currentChamp;
+}
+
+
 function efed_title_history($titleID)
 {
 	$args = array(
-		post_type => 'match',
-		order_by => 'date',
-		order => 'ASC',
-		post_status => 'publish',
-		posts_per_page => -1,		
-		meta_query => array(),
+		'post_type' => 'match',
+		'order_by' => 'date',
+		'order' => 'ASC',
+		'post_status' => 'publish',
+		'posts_per_page' => -1,		
 		);
-	$args[meta_query][] = array(
-			'key' => 'title',
-			'value' => $titleID,
-		);
+	$args['meta_query'][] = array(
+				'key' => 'title',
+				'value' => $titleID,
+			);
 	
 	$out = get_posts($args);
+
 	$reigns = array();
 	$reignCount = array();
 	$champList = array(0=>''); // Get rid of false failures in array_search
@@ -685,22 +790,25 @@ function efed_title_history($titleID)
 			if ($lastID >= 0)
 			{
 				$loserNum = array_search($reigns[$lastID]['champion'], $champList);
-			
+
 				$reigns[$lastID]['loss'] = get_the_date( 'Y-m-d', $titleMatch->ID );
 				$rend = strtotime(get_the_date( 'Y-m-d', $titleMatch->ID ));
 				$rstart = strtotime($reigns[$lastID]['win']);
 				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
 				$reigns[$lastID]['length'] = $rdiff;
-				if (array_key_exists($loserNum, $reignCount))
-				{	
-					$reignCount[$loserNum]['days'] = $reignCount[$loserNum]['days'] + $rdiff;
-				}
-				else
+				if ($loserNum != false)
 				{
-					$reignCount[$loserNum]['days'] = $rdiff;
+					if (array_key_exists($loserNum, $reignCount) && array_key_exists ('days', $reignCount[$loserNum]))
+					{	
+						$reignCount[$loserNum]['days'] = $reignCount[$loserNum]['days'] + $rdiff;
+					}
+					else
+					{
+						$reignCount[$loserNum]['days'] = $rdiff;
+					}
+					if ($reigns[$lastID]['champion'] != "Title Vacant")
+						$reigns[$lastID]['total'] = $reignCount[$loserNum]['days'];
 				}
-				if ($reigns[$lastID]['champion'] != "Title Vacant")
-					$reigns[$lastID]['total'] = $reignCount[$loserNum]['days'];
 			}
 			
 			if (array_key_exists($victorNum, $reignCount))
@@ -736,7 +844,10 @@ function efed_title_history($titleID)
 				$rstart = strtotime($reigns[$lastID]['win']);
 				$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
 				$reigns[$lastID]['length'] = $rdiff;
-				$reignCount[$victorNum]['days'] = $reignCount[$victorNum]['days'] + $rdiff;
+				if ($victorNum != false && array_key_exists($victorNum, $reignCount) && array_key_exists('days',$reignCount[$victorNum]))
+					$reignCount[$victorNum]['days'] = $reignCount[$victorNum]['days'] + $rdiff;
+				else
+					$reignCount[$victorNum]['days'] = $rdiff;
 				$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
 			}
 			
@@ -752,20 +863,24 @@ function efed_title_history($titleID)
 		}
 		
 	}
-	
-	$rend = time();
-	$rstart = strtotime($reigns[$lastID]['win']);
-	$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
-	$reigns[$lastID]['length'] = $rdiff;
-	$reignCount[$victorNum]['days'] += $rdiff;
-	if ($reigns[$lastID]['champion'] != "Title Vacant")
-		$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
-	
+	if (count($reigns) > 0)
+	{
+		$rend = time();
+		$rstart = strtotime($reigns[$lastID]['win']);
+		$rdiff = floor(($rend - $rstart) / (60 * 60 * 24));
+		$reigns[$lastID]['length'] = $rdiff;
+		if (array_key_exists($victorNum, $reignCount) && array_key_exists('days', $reignCount[$victorNum]))
+			$reignCount[$victorNum]['days'] += $rdiff;
+		else
+			$reignCount[$victorNum]['days'] = $rdiff;
+		if ($reigns[$lastID]['champion'] != "Title Vacant")
+			$reigns[$lastID]['total'] = $reignCount[$victorNum]['days'];
+	}
 	//print_r($reignCount);
-/* 	echo '<pre>';
+ 	/*echo '<pre>';
 	print_r ($reigns);
-	echo '</pre>'; */
-	
+	echo '</pre>';*/ 
+
 	return $reigns;	
 }
 

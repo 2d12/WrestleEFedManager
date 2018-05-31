@@ -57,11 +57,20 @@ get_header(); ?>
 						<div style="float: right; width: 100%; margin:0 0 10px 10px; padding: 5px 0; border: 1px solid #000;  background: #e5e5e5;">
 							<div style="text-align:center;"><?php the_post_thumbnail(); ?></div>
 							<table>
+								<?php if (get_post_meta(get_the_ID(), 'alignment') > 0) { ?>
 								<tr><td>Alignment:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'alignment', true)); ?></td></tr>
+								<?php }
+								if (get_post_meta(get_the_ID(), 'weightclass') > 0) { ?>
 								<tr><td>Weight Class:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'weightclass', true));?></td></tr>
-
+								<?php }
+								if (strlen(get_post_meta(get_the_ID(), 'position')) > 0) { ?>
+								<tr><td>Position:</td><td><?php echo get_post_meta( get_the_ID(), 'position', true);?></td></tr>
+								<?php }
+								if (get_post_meta(get_the_ID(), 'gender') > 0) { ?>
 								<tr><td>Gender:</td><td><?php echo get_the_title(get_post_meta( get_the_ID(), 'gender', true )); ?></td></tr>
-								<?php if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
+								
+								<?php }
+								if (strlen(get_post_meta( get_the_ID(), 'height', true )) > 0) {
 									?>
 									<tr><td>Height:</td><td><?php echo get_post_meta( get_the_ID(), 'height', true ); ?></td></tr>
 								<?php }
@@ -84,7 +93,7 @@ get_header(); ?>
 				<div class="entry-content">
 
 					<?php
-					
+					$link = $tname = $artist = false;
 					if (strlen(get_post_meta( get_the_ID(), 'themelink', true )) > 0)
 					{$link = true;}
 					if (strlen(get_post_meta( get_the_ID(), 'themename', true )) > 0)
@@ -172,7 +181,7 @@ get_header(); ?>
 
 						echo '<a href="' . get_permalink($matchID) . '">'. get_the_title($matchID) . '</a></td><td>';
 						echo $matchResult;
-						$victors = $match->victors;
+						//$victors = $matchResult->victors;
 				
 						echo '</td></tr>';
 					}
@@ -208,6 +217,7 @@ get_header(); ?>
 							echo '<tr><td>' . $reign['win'] ;
 							if (count($reign['cowinner']) > 0)
 							{
+								$cochampcount = 0;
 								echo '<br />With ';
 								foreach($reign['cowinner'] as $cowin)
 								{
@@ -229,6 +239,7 @@ get_header(); ?>
 							echo '<td>';
 							if (count($reign['prev']) > 0)
 							{
+								$champcount = 0;
 								foreach($reign['prev'] as $champid)
 								{
 									$champcount++;
@@ -259,6 +270,7 @@ get_header(); ?>
 								echo '<td>';
 								if (count($reign['next']) > 0)
 								{
+									$champcount = 0;
 									foreach($reign['next'] as $champid)
 									{
 										$champcount++;

@@ -91,7 +91,7 @@ class efedmanager_Championship {
 		add_meta_box( string $id, string $championship, callable $callback, string|array|WP_Screen $screen = null, 
 		              string $context = 'advanced', string $priority = 'default', array $callback_args = null )*/
 		add_meta_box("feddiv", "Federation/Division", array( $this, 'championship_div'), "championship", "normal", "low");
-		add_meta_box("type", "championship Type", array( $this, 'championship_type'), "championship", "normal", "low");
+		add_meta_box("type", "Championship Type", array( $this, 'championship_type'), "championship", "normal", "low");
 		add_meta_box("weightclass", "Weight Class", array( $this, 'championship_wc'), "championship", "normal", "low");
 		add_meta_box("gender", "Gender", array( $this, 'championship_gender'), "championship", "normal", "low");
 		
@@ -100,16 +100,20 @@ class efedmanager_Championship {
 	function championship_div()
 	{
 		global $post;
+		$fed = array();
 		$custom = get_post_custom($post->ID);
-		$fed = unserialize($custom["federations"][0]);
+		if (array_key_exists("federations", $custom))
+			$fed = unserialize($custom["federations"][0]);
 		efed_select_from_entries('championship_federation', 'feds', $fed, true, true);
 	}
 	
 	function championship_type()
 	{
 		global $post;
+		$type = "";
 		$custom = get_post_custom($post->ID);
-		$type = $custom["type"][0];
+		if (array_key_exists("type", $custom))
+			$type = $custom["type"][0];
 		?>
 		<label for="championship_type">Type</label>
 		<select name='championship_type'>
@@ -126,25 +130,39 @@ class efedmanager_Championship {
 	function championship_wc()
 	{
 		global $post;
+		$wc = array();
 		$custom = get_post_custom($post->ID);
-		$wc = unserialize($custom["weightclasses"][0]);
+		if (array_key_exists("weightclasses", $custom))
+			$wc = unserialize($custom["weightclasses"][0]);
 		efed_select_from_entries('championship_weightclass', 'weightclasses', $wc, true);
 	}
 	
 	function championship_gender()
 	{
 		global $post;
+		$gender = array();
 		$custom = get_post_custom($post->ID);
-		$gender = unserialize($custom["genders"][0]);
+		if (array_key_exists("genders", $custom))
+			$gender = unserialize($custom["genders"][0]);
 		efed_select_from_entries('championship_gender', 'genders', $gender, true);
 	}
 	
 	function save_championship(){
 		global $post;
 		
-		update_post_meta($post->ID, "federations", $_POST["championship_federation"]);
-		update_post_meta($post->ID, "weightclasses", $_POST["championship_weightclass"]);
-		update_post_meta($post->ID, "genders", $_POST["championship_gender"]);
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'championship' post, don't update it.
+		if ( "championship" != $post_type ) return;	
+		if (count ($_POST) <= 0)
+			return;
+
+		if (array_key_exists("championship_federation", $_POST))
+			update_post_meta($post->ID, "federations", $_POST["championship_federation"]);
+		if (array_key_exists("championship_weightclass", $_POST))
+			update_post_meta($post->ID, "weightclasses", $_POST["championship_weightclass"]);
+		if (array_key_exists("championship_gender", $_POST))
+			update_post_meta($post->ID, "genders", $_POST["championship_gender"]);
 		update_post_meta($post->ID, "type", $_POST["championship_type"]);
 	}
 

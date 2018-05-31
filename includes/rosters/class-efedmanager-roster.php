@@ -86,36 +86,43 @@ class efedmanager_Roster {
 	
 	
 	function initialize_roster_post_type() {
-		/*
-		add_meta_box( string $id, string $title, callable $callback, string|array|WP_Screen $screen = null, 
-		              string $context = 'advanced', string $priority = 'default', array $callback_args = null )*/
 		add_meta_box("filters", "Filters", array( $this, 'roster_filters'), "roster", "normal", "low");
-		//add_meta_box("data", "Data", array ($this, 'roster_data'), "roster", "normal", "low");
 		}
-		
-		/*function roster_data()
-		{
-			global $post;
-			$custom = get_post_custom($post->ID);
-			
-			print_r($custom);
-		}*/
 
     /**
      *
      */
     function roster_filters() {
 		global $post;
+		$team = "";
+		$fed = array();
+		$wc = array();
+		$gender = array();
+		$align = array();
+		$showfed = false;
+		$showwc = false;
+		$showgender = false;
+		$showalign = false;
+		
 		$custom = get_post_custom($post->ID);
-		$team = $custom["team"][0];
-		$fed = unserialize($custom["fedfilter"][0]);
-		$wc = unserialize($custom["wcfilter"][0]);
-		$gender = unserialize($custom["genderfilter"][0]);
-		$align = unserialize($custom["alignfilter"][0]);
-		$showfed = $custom["showfed"][0];
-		$showwc = $custom["showwc"][0];
-		$showgender = $custom["showgender"][0];
-		$showalign = $custom["showalign"][0];
+		if (array_key_exists("team", $custom))
+			$team = $custom["team"][0];
+		if (array_key_exists("fedfilter", $custom))
+			$fed = unserialize($custom["fedfilter"][0]);
+		if (array_key_exists("wcfilter", $custom))
+			$wc = unserialize($custom["wcfilter"][0]);
+		if (array_key_exists("genderfilter", $custom))
+			$gender = unserialize($custom["genderfilter"][0]);
+		if (array_key_exists("alignfilter", $custom))
+			$align = unserialize($custom["alignfilter"][0]);
+		if (array_key_exists("showfed", $custom))
+			$showfed = $custom["showfed"][0];
+		if (array_key_exists("showwc", $custom))
+			$showwc = $custom["showwc"][0];
+		if (array_key_exists("showgender", $custom))
+			$showgender = $custom["showgender"][0];
+		if (array_key_exists("showalign", $custom))
+			$showalign = $custom["showalign"][0];
 
 		?>
 		<table>
@@ -155,23 +162,35 @@ class efedmanager_Roster {
 	
 	function save_roster(){
 		global $post;
+		$post_type = get_post_type($post);
+
+		// If this isn't a 'roster' post, don't update it.
+		if ( "roster" != $post_type ) return;
+		if (count ($_POST) <= 0)
+			return;
+
+
 		update_post_meta($post->ID, "team", $_POST["roster_team"]);
 		
-		update_post_meta($post->ID, "fedfilter", $_POST["roster_federation"]);
-		update_post_meta($post->ID, "wcfilter", $_POST["roster_weightclass"]);
-		update_post_meta($post->ID, "genderfilter", $_POST["roster_gender"]);
-		update_post_meta($post->ID, "alignfilter", $_POST["roster_alignment"]);
+		if (array_key_exists("roster_federation", $_POST))
+			update_post_meta($post->ID, "fedfilter", $_POST["roster_federation"]);
+		if (array_key_exists("roster_weightclass", $_POST))
+			update_post_meta($post->ID, "wcfilter", $_POST["roster_weightclass"]);
+		if (array_key_exists("roster_gender", $_POST))
+			update_post_meta($post->ID, "genderfilter", $_POST["roster_gender"]);
+		if (array_key_exists("roster_alignment", $_POST))
+			update_post_meta($post->ID, "alignfilter", $_POST["roster_alignment"]);
 		
-		$fedtf = $_POST['showfed'] ? true : false;
+		$fedtf = array_key_exists("showfed", $_POST);
 		update_post_meta($post->ID, "showfed", $fedtf);
 		
-		$wctf = $_POST['showwc'] ? true : false;
+		$wctf = array_key_exists("showwc", $_POST);
 		update_post_meta($post->ID, "showwc", $wctf);
 		
-		$gendertf = $_POST['showgender'] ? true : false;
+		$gendertf = array_key_exists("showgender", $_POST);
 		update_post_meta($post->ID, "showgender", $gendertf);
 		
-		$aligntf = $_POST['showalign'] ? true : false;
+		$aligntf = array_key_exists("showalign", $_POST);
 		update_post_meta($post->ID, "showalign", $aligntf);
 	}
 }
